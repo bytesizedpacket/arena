@@ -1,5 +1,6 @@
 ///<reference types="pixi.js"/>
 import * as PIXI from "pixi.js";
+// TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // game properties
 let gameWidth: number = 256;
