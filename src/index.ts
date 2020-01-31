@@ -1,2 +1,1 @@
-// test
 console.log("test");
