@@ -6,6 +6,16 @@ import * as PIXI from "pixi.js";
 let gameWidth: number = 256;
 let gameHeight: number = 256;
 let gameState: Function;
+let player: Player;
+
+// main player object
+class Player {
+  public spriteObject: PIXI.Sprite;
+
+  constructor(spriteObject: PIXI.Sprite) {
+    this.spriteObject = spriteObject;
+  }
+}
 
 // aliases and helpful variables
 let statusDiv = document.getElementById("status");
@@ -21,7 +31,7 @@ document.body.appendChild(app.view);
 // main gameplay loop
 let gameLoop = function(delta: any) {
   // TODO: create player object that references this
-  let playerSprite = sprites[0];
+  let playerSprite = player.spriteObject;
 
   playerSprite.x += 0.5; // look at her go
   if (playerSprite.x > app.view.width) playerSprite.x = playerSprite.width * -1; // wrap around
@@ -38,6 +48,10 @@ let setup = function() {
     let currentSprite = new PIXI.Sprite(
       app.loader.resources[asset.name].texture
     );
+
+    if (asset.name == "player") {
+      player = new Player(currentSprite);
+    }
 
     // populate our sprite array with this
     sprites.push(currentSprite);
