@@ -9,6 +9,8 @@
     "build": "node_modules/.bin/webpack -p --progress"
   },
   "dependencies": {
+    "@types/pixi.js": "^5.0.0",
+    "pixi.js": "^5.2.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
     "webpack": "^4.41.5",
