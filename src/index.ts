@@ -10,7 +10,7 @@ let gameState: Function;
 let statusDiv = document.getElementById("status");
 
 // these are our assets
-let assets: string[] = ["assets/sprites/jigglypuff.png"];
+let assets = [{ name: "player", url: "assets/sprites/player.png" }];
 let sprites: PIXI.Sprite[] = []; // this will be populated later
 
 // setup pixi
@@ -19,8 +19,11 @@ document.body.appendChild(app.view);
 
 // main gameplay loop
 let gameLoop = function(delta: any) {
-  sprites[0].x += 0.5; // look at her go
-  if (sprites[0].x > app.view.width) sprites[0].x = sprites[0].width * -1; // wrap around
+  // TODO: create player object that references this
+  let playerSprite = sprites[0];
+
+  playerSprite.x += 0.5; // look at her go
+  if (playerSprite.x > app.view.width) playerSprite.x = playerSprite.width * -1; // wrap around
 };
 
 // this won't run until after our assets have loaded
@@ -31,12 +34,9 @@ let setup = function() {
   // run this for each asset we have loaded
   assets.forEach(function(asset) {
     // create the sprite object
-    let currentSprite = new PIXI.Sprite(app.loader.resources[asset].texture);
-
-    // set the name of the sprite based on the filename of its texture
-    currentSprite.name = asset
-      .substr(asset.lastIndexOf("/") + 1)
-      .replace(".png", "");
+    let currentSprite = new PIXI.Sprite(
+      app.loader.resources[asset.name].texture
+    );
 
     // populate our sprite array with this
     sprites.push(currentSprite);
