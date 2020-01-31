@@ -1,5 +1,6 @@
 ///<reference types="pixi.js"/>
 import * as PIXI from "pixi.js";
+import { Player } from "./player";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // game properties
@@ -7,15 +8,6 @@ let gameWidth: number = 256;
 let gameHeight: number = 256;
 let gameState: Function;
 let player: Player;
-
-// main player object
-class Player {
-  public spriteObject: PIXI.Sprite;
-
-  constructor(spriteObject: PIXI.Sprite) {
-    this.spriteObject = spriteObject;
-  }
-}
 
 // aliases and helpful variables
 let statusDiv = document.getElementById("status");
