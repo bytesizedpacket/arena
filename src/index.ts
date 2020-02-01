@@ -26,7 +26,7 @@ let assets = [
   { name: "player", url: "assets/sprites/player.png" },
   { name: "enemy", url: "assets/sprites/enemy.png" }
 ];
-let entities: Entity[] = []; // this will be populated later
+export let entities: Entity[] = []; // this will be populated later
 
 // setup pixi
 let app = new PIXI.Application({ width: gameWidth, height: gameHeight });
@@ -102,6 +102,9 @@ app.loader
         app.loader.resources[asset.name].texture
       );
 
+      // keep this consistent
+      currentSprite.name = asset.name;
+
       switch (asset.name) {
         case "player":
           // set up player object with this sprite
@@ -138,4 +141,61 @@ let tick = function(delta: any) {
   gameState(delta);
   Keyboard.update();
   Mouse.update();
+};
+
+// check for collision between two sprites
+export let checkSpriteCollision = function(
+  sprite1: PIXI.Sprite,
+  sprite2: PIXI.Sprite
+) {
+  //Define the variables we'll need to calculate
+  let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+  // alsdjfkafds
+  let r1 = {
+    //Find the center points of each sprite
+    centerX: sprite1.x + sprite2.width / 2,
+    centerY: sprite1.y + sprite1.height / 2,
+    //Find the half-widths and half-heights of each sprite
+    halfWidth: sprite1.width / 2,
+    halfHeight: sprite1.height / 2
+  };
+
+  let r2 = {
+    //Find the center points of each sprite
+    centerX: sprite2.x + sprite2.width / 2,
+    centerY: sprite2.y + sprite2.height,
+    //Find the half-widths and half-heights of each sprite
+    halfWidth: sprite2.width / 2,
+    halfHeight: sprite2.height / 2
+  };
+
+  //hit will determine whether there's a collision
+  hit = false;
+
+  //Calculate the distance vector between the sprites
+  vx = r1.centerX - r2.centerX;
+  vy = r1.centerY - r2.centerY;
+
+  //Figure out the combined half-widths and half-heights
+  combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+  combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+
+  //Check for a collision on the x axis
+  if (Math.abs(vx) < combinedHalfWidths) {
+    //A collision might be occurring. Check for a collision on the y axis
+    if (Math.abs(vy) < combinedHalfHeights) {
+      //There's definitely a collision happening
+      hit = true;
+    } else {
+      //There's no collision on the y axis
+      hit = false;
+    }
+  } else {
+    //There's no collision on the x axis
+    hit = false;
+  }
+
+  //`hit` will be either `true` or `false`
+  return hit;
 };

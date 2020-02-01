@@ -82,7 +82,7 @@ export class Entity {
   public tick() {
     this.updateHealthBar();
 
-    // uh oh spaghettios we're dead
+    // uh oh spaghettios it's dead
     if (this.health <= 0) {
       this.health = 0; // prevents the healthbar from descending into deader-than-dead
       this.state = State.DEAD;
