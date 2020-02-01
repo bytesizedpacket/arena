@@ -3,8 +3,6 @@ import { Graphics } from "pixi.js";
 import { Container } from "pixi.js";
 import { Application } from "pixi.js";
 
-// useful variables
-let statusDiv = document.getElementById("status");
 export enum State {
   ACTIVE,
   DEAD

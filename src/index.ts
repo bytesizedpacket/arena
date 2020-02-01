@@ -5,7 +5,7 @@ import * as Keyboard from "pixi.js-keyboard";
 // @ts-ignore
 import * as Mouse from "pixi.js-mouse";
 import { Player } from "./player";
-import { State } from "./player";
+import { State } from "./entity";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // game properties
@@ -13,7 +13,7 @@ let gameWidth: number = 256;
 let gameHeight: number = 256;
 let zoomScale: number = 2; // how much to zoom the viewport
 let gameState: Function;
-let player: Player;
+export let player: Player;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 // aliases and helpful variables
