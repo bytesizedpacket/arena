@@ -4,7 +4,9 @@
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
-    "allowJs": true
+    "allowJs": true,
+    "types": ["pixi.js"],
+    "sourceMap": true
   },
   "include": ["src/**/*", "node_modules/@types"]
 }

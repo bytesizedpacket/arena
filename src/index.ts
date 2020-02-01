@@ -1,4 +1,3 @@
-///<reference types="pixi.js"/>
 import * as PIXI from "pixi.js";
 // make vscode ignore these since they don't have typings
 // @ts-ignore
