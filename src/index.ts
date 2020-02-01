@@ -1,5 +1,10 @@
 ///<reference types="pixi.js"/>
 import * as PIXI from "pixi.js";
+// make vscode ignore these since they don't have typings
+// @ts-ignore
+import * as Keyboard from "pixi.js-keyboard";
+// @ts-ignore
+import * as Mouse from "pixi.js-mouse";
 import { Player } from "./player";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
@@ -20,13 +25,25 @@ let sprites: PIXI.Sprite[] = []; // this will be populated later
 let app = new PIXI.Application({ width: gameWidth, height: gameHeight });
 document.body.appendChild(app.view);
 
+// disable rightclicking
+app.view.addEventListener("contextmenu", e => {
+  if (e.type == "contextmenu") e.preventDefault();
+});
+
 // main gameplay loop
 let gameLoop = function(delta: any) {
   // TODO: create player object that references this
   let playerSprite = player.spriteObject;
 
-  playerSprite.x += 0.5; // look at her go
-  if (playerSprite.x > app.view.width) playerSprite.x = playerSprite.width * -1; // wrap around
+  // handle input!
+  if (Keyboard.isKeyDown("KeyS", "ArrowDown"))
+    playerSprite.y += delta * player.speed;
+  if (Keyboard.isKeyDown("KeyW", "ArrowUp"))
+    playerSprite.y -= delta * player.speed;
+  if (Keyboard.isKeyDown("KeyD", "ArrowRight"))
+    playerSprite.x += delta * player.speed;
+  if (Keyboard.isKeyDown("KeyA", "ArrowLeft"))
+    playerSprite.x -= delta * player.speed;
 };
 
 // this won't run until after our assets have loaded
@@ -65,7 +82,9 @@ app.loader
   })
   .load(setup);
 
-// runs 60 times per second
+// keeps all of our shit running
 let tick = function(delta: any) {
   gameState(delta);
+  Keyboard.update();
+  Mouse.update();
 };
