@@ -3,8 +3,16 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
+const mode = "development";
+let isProd = false;
+
+// relevant for later
+if (mode == "production") {
+  let isProd = true;
+}
+
 module.exports = {
-  mode: "development",
+  mode: mode,
   entry: path.join(__dirname, "src", "index.ts"),
   watch: true,
   plugins: [
@@ -25,7 +33,11 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        terserOptions: { mangle: true, output: { comments: false } },
+        sourceMap: true,
+        terserOptions: {
+          mangle: true,
+          output: { comments: false }
+        },
         extractComments: false
       })
     ]
@@ -48,7 +60,7 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"]
   },
-  devtool: "inline-source-map",
+  devtool: isProd ? false : "source-map", // only generate source maps in development mode
   devServer: {
     contentBase: path.join("./dist/"),
     historyApiFallback: true,
