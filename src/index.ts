@@ -6,6 +6,7 @@ import * as Keyboard from "pixi.js-keyboard";
 // @ts-ignore
 import * as Mouse from "pixi.js-mouse";
 import { Player } from "./player";
+import { State } from "./player";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // game properties
@@ -34,38 +35,41 @@ app.view.addEventListener("contextmenu", e => {
 let gameLoop = function(delta: any) {
   let playerSprite = player.spriteObject;
 
-  // handle input!
-  if (Keyboard.isKeyDown("KeyS", "ArrowDown")) {
-    player.velY = player.speed;
-  } else {
-    if (!Keyboard.isKeyDown("KeyW", "ArrowUp")) player.velY = 0;
-  }
+  // only if the player is alive...
+  if (player.state == State.ACTIVE) {
+    // handle input!
+    if (Keyboard.isKeyDown("KeyS", "ArrowDown")) {
+      player.velY = player.speed;
+    } else {
+      if (!Keyboard.isKeyDown("KeyW", "ArrowUp")) player.velY = 0;
+    }
 
-  if (Keyboard.isKeyDown("KeyD", "ArrowRight")) {
-    player.velX = player.speed;
-  } else {
-    if (!Keyboard.isKeyDown("KeyA", "ArrowLeft")) player.velX = 0;
-  }
+    if (Keyboard.isKeyDown("KeyD", "ArrowRight")) {
+      player.velX = player.speed;
+    } else {
+      if (!Keyboard.isKeyDown("KeyA", "ArrowLeft")) player.velX = 0;
+    }
 
-  if (Keyboard.isKeyDown("KeyW", "ArrowUp")) {
-    player.velY = player.speed * -1;
-  } else {
-    if (!Keyboard.isKeyDown("KeyS", "ArrowDown")) player.velY = 0;
-  }
+    if (Keyboard.isKeyDown("KeyW", "ArrowUp")) {
+      player.velY = player.speed * -1;
+    } else {
+      if (!Keyboard.isKeyDown("KeyS", "ArrowDown")) player.velY = 0;
+    }
 
-  if (Keyboard.isKeyDown("KeyA", "ArrowLeft")) {
-    player.velX = player.speed * -1;
-  } else {
-    if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
-  }
+    if (Keyboard.isKeyDown("KeyA", "ArrowLeft")) {
+      player.velX = player.speed * -1;
+    } else {
+      if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
+    }
 
-  if (Keyboard.isKeyDown("KeyB")) {
-    player.health -= 1;
-  }
+    if (Keyboard.isKeyDown("KeyB")) {
+      player.health -= 1;
+    }
 
-  // actually move the sprite
-  playerSprite.x += player.velX * delta;
-  playerSprite.y += player.velY * delta;
+    // actually move the sprite
+    playerSprite.x += player.velX * delta;
+    playerSprite.y += player.velY * delta;
+  }
 
   // make sure player does all of its per-frame crap
   player.tick();

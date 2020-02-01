@@ -4,7 +4,7 @@ import * as PIXI from "pixi.js";
 
 // useful variables
 let statusDiv = document.getElementById("status");
-enum State {
+export enum State {
   ACTIVE,
   DEAD
 }
