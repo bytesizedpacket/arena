@@ -1,12 +1,27 @@
+///<reference types="pixi.js"/>
+import * as PIXI from "pixi.js";
+// TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
+
+// TODO: create generic Entity class and have player extend it
 // main player object
 export class Player {
   public spriteObject: PIXI.Sprite;
+  public healthBar: PIXI.Container;
+  public rearHealthBar: PIXI.Graphics;
+  public frontHealthBar: PIXI.Graphics;
+  public health: number = 100;
   public speed: number; // default 2 if not specified
   public velX: number = 0; // velocity X
   public velY: number = 0; // velocity Y
 
+  constructor(
+    spriteObject: PIXI.Sprite,
+    app: PIXI.Application,
     speed?: number,
+    displayHealthBar?: boolean
+  ) {
     this.spriteObject = spriteObject;
+
     if (speed) {
       this.speed = speed;
     } else {
@@ -15,5 +30,37 @@ export class Player {
 
     this.velX = 0;
     this.velY = 0;
+
+    // set up our health bar (enabled by default)
+    if (displayHealthBar == undefined || displayHealthBar) {
+      this.healthBar = new PIXI.Container();
+
+      // create the back red rectangle
+      this.rearHealthBar = new PIXI.Graphics();
+      this.rearHealthBar.beginFill(0xff3300);
+      this.rearHealthBar.drawRect(0, 0, this.spriteObject.width, 2);
+      this.rearHealthBar.endFill();
+      this.healthBar.addChild(this.rearHealthBar);
+
+      //Create the front green rectangle
+      this.frontHealthBar = new PIXI.Graphics();
+      this.frontHealthBar.beginFill(0x00ff00);
+      this.frontHealthBar.drawRect(0, 0, this.spriteObject.width, 2);
+      this.frontHealthBar.endFill();
+      this.healthBar.addChild(this.frontHealthBar);
+
+      app.stage.addChild(this.healthBar);
+    }
+  }
+
+  // this runs every frame to update the health bar
+  public updateHealthBar() {
+    this.healthBar.position.set(
+      this.spriteObject.x,
+      this.spriteObject.y + this.spriteObject.height + 2
+    );
+
+    // change size of green to represent current health
+    this.frontHealthBar.width = (this.health * this.rearHealthBar.width) / 100;
   }
 }

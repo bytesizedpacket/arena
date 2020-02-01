@@ -67,6 +67,8 @@ let gameLoop = function(delta: any) {
   playerSprite.x += player.velX * delta;
   playerSprite.y += player.velY * delta;
 
+  // update player's health bar
+  player.updateHealthBar();
 };
 
 // this won't run until after our assets have loaded
@@ -81,8 +83,14 @@ let setup = function() {
       app.loader.resources[asset.name].texture
     );
 
+    // this is the player!
     if (asset.name == "player") {
-      player = new Player(currentSprite);
+      // set up player object with this sprite
+      player = new Player(currentSprite, app);
+
+      // put sprite in the center of the stage
+      currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
+      currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
     }
 
     // populate our sprite array with this
