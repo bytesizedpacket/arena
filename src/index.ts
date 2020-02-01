@@ -32,7 +32,6 @@ app.view.addEventListener("contextmenu", e => {
 
 // main gameplay loop
 let gameLoop = function(delta: any) {
-  // TODO: create player object that references this
   let playerSprite = player.spriteObject;
 
   // handle input!
