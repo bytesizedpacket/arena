@@ -12,8 +12,10 @@ import { State } from "./player";
 // game properties
 let gameWidth: number = 256;
 let gameHeight: number = 256;
+let zoomScale: number = 2; // how much to zoom the viewport
 let gameState: Function;
 let player: Player;
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 // aliases and helpful variables
 let statusDiv = document.getElementById("status");
@@ -102,6 +104,10 @@ let setup = function() {
 
     // add sprite to stage
     app.stage.addChild(currentSprite);
+
+    // scale view
+    app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
+    app.stage.scale.set(zoomScale, zoomScale);
 
     // begin game loop
     gameState = gameLoop;
