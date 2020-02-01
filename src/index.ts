@@ -35,14 +35,38 @@ let gameLoop = function(delta: any) {
   let playerSprite = player.spriteObject;
 
   // handle input!
-  if (Keyboard.isKeyDown("KeyS", "ArrowDown"))
-    playerSprite.y += delta * player.speed;
-  if (Keyboard.isKeyDown("KeyW", "ArrowUp"))
-    playerSprite.y -= delta * player.speed;
-  if (Keyboard.isKeyDown("KeyD", "ArrowRight"))
-    playerSprite.x += delta * player.speed;
-  if (Keyboard.isKeyDown("KeyA", "ArrowLeft"))
-    playerSprite.x -= delta * player.speed;
+  if (Keyboard.isKeyDown("KeyS", "ArrowDown")) {
+    player.velY = player.speed;
+  } else {
+    if (!Keyboard.isKeyDown("KeyW", "ArrowUp")) player.velY = 0;
+  }
+
+  if (Keyboard.isKeyDown("KeyD", "ArrowRight")) {
+    player.velX = player.speed;
+  } else {
+    if (!Keyboard.isKeyDown("KeyA", "ArrowLeft")) player.velX = 0;
+  }
+
+  if (Keyboard.isKeyDown("KeyW", "ArrowUp")) {
+    player.velY = player.speed * -1;
+  } else {
+    if (!Keyboard.isKeyDown("KeyS", "ArrowDown")) player.velY = 0;
+  }
+
+  if (Keyboard.isKeyDown("KeyA", "ArrowLeft")) {
+    player.velX = player.speed * -1;
+  } else {
+    if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
+  }
+
+  if (Keyboard.isKeyDown("KeyB")) {
+    player.health -= 1;
+  }
+
+  // actually move the sprite
+  playerSprite.x += player.velX * delta;
+  playerSprite.y += player.velY * delta;
+
 };
 
 // this won't run until after our assets have loaded
