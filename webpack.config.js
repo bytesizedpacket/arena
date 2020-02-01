@@ -22,7 +22,13 @@ module.exports = {
   ],
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()]
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: { mangle: true, output: { comments: false } },
+        extractComments: false
+      })
+    ]
   },
   output: {
     path: path.resolve(__dirname, "dist"),
