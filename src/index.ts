@@ -4,14 +4,16 @@ import * as PIXI from "pixi.js";
 import * as Keyboard from "pixi.js-keyboard";
 // @ts-ignore
 import * as Mouse from "pixi.js-mouse";
-import { Player } from "./player";
+import { Entity } from "./entity";
 import { State } from "./entity";
+import { Player } from "./player";
+import { Enemy } from "./enemy";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // game properties
 let gameWidth: number = 256;
 let gameHeight: number = 256;
-let zoomScale: number = 2; // how much to zoom the viewport
+let zoomScale: number = 1; // how much to zoom the viewport
 let gameState: Function;
 export let player: Player;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
@@ -20,8 +22,11 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 let statusDiv = document.getElementById("status");
 
 // these are our assets
-let assets = [{ name: "player", url: "assets/sprites/player.png" }];
-let sprites: PIXI.Sprite[] = []; // this will be populated later
+let assets = [
+  { name: "player", url: "assets/sprites/player.png" },
+  { name: "enemy", url: "assets/sprites/enemy.png" }
+];
+let entities: Entity[] = []; // this will be populated later
 
 // setup pixi
 let app = new PIXI.Application({ width: gameWidth, height: gameHeight });
@@ -72,8 +77,10 @@ let gameLoop = function(delta: any) {
     playerSprite.y += player.velY * delta;
   }
 
-  // make sure player does all of its per-frame crap
-  player.tick();
+  // make sure every entity handles their ticks
+  entities.forEach(function(entity: Entity) {
+    entity.tick();
+  });
 };
 
 // begin loading assets
@@ -83,7 +90,7 @@ app.loader
     statusDiv.innerHTML = app.loader.progress + "% Loading...";
   })
   .load(function() {
-    // Begin game init
+    // Set up a new game
 
     // clear our status thingy
     statusDiv.innerHTML = "Press B to deplete health";
@@ -95,18 +102,23 @@ app.loader
         app.loader.resources[asset.name].texture
       );
 
-      // this is the player!
-      if (asset.name == "player") {
-        // set up player object with this sprite
-        player = new Player(currentSprite, app);
+      switch (asset.name) {
+        case "player":
+          // set up player object with this sprite
+          player = new Player(currentSprite, app);
+          entities.push(player);
 
-        // put sprite in the center of the stage
-        currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
-        currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
+          // put sprite in the center of the stage
+          currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
+          currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
+          break;
+        case "enemy":
+          // TODO: spawn multiple enemies and place them accordingly
+          let enemy = new Enemy(currentSprite, app);
+          entities.push(enemy);
+
+          break;
       }
-
-      // populate our sprite array with this
-      sprites.push(currentSprite);
 
       // add sprite to stage
       app.stage.addChild(currentSprite);
