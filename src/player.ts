@@ -90,7 +90,7 @@ export class Player {
     if (this.health <= 0) {
       this.health = 0; // prevents the healthbar from descending into deader-than-dead
       this.state = State.DEAD;
-      statusDiv.innerHTML = "Uh-oh spaghetti-o's! You're <b>dead.</b><br/>";
+      statusDiv.innerHTML = "Uh-oh spaghetti-o's! You're <b>dead.</b>";
     }
   }
 }

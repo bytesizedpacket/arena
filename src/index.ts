@@ -81,7 +81,7 @@ let gameLoop = function(delta: any) {
 app.loader
   .add(assets)
   .on("progress", function() {
-    statusDiv.innerHTML = app.loader.progress + "% Loading...<br/>";
+    statusDiv.innerHTML = app.loader.progress + "% Loading...";
   })
   .load(function() {
     // Begin game init
