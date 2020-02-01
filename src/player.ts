@@ -2,6 +2,13 @@
 import * as PIXI from "pixi.js";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
+// useful variables
+let statusDiv = document.getElementById("status");
+enum State {
+  ACTIVE,
+  DEAD
+}
+
 // TODO: create generic Entity class and have player extend it
 // main player object
 export class Player {
@@ -9,6 +16,7 @@ export class Player {
   public healthBar: PIXI.Container;
   public rearHealthBar: PIXI.Graphics;
   public frontHealthBar: PIXI.Graphics;
+  public state: State;
   public health: number = 100;
   public speed: number; // default 2 if not specified
   public velX: number = 0; // velocity X
@@ -38,7 +46,7 @@ export class Player {
       // create the back red rectangle
       this.rearHealthBar = new PIXI.Graphics();
       this.rearHealthBar.beginFill(0xff3300);
-      this.rearHealthBar.drawRect(0, 0, this.spriteObject.width, 2);
+      this.rearHealthBar.drawRect(0, 0, this.spriteObject.width, 2); // same width as the sprite
       this.rearHealthBar.endFill();
       this.healthBar.addChild(this.rearHealthBar);
 
@@ -51,16 +59,36 @@ export class Player {
 
       app.stage.addChild(this.healthBar);
     }
+
+    // initiate as alive
+    this.state = State.ACTIVE;
   }
 
-  // this runs every frame to update the health bar
+  // keep healthbar under player and displaying correct amount of health
   public updateHealthBar() {
-    this.healthBar.position.set(
-      this.spriteObject.x,
-      this.spriteObject.y + this.spriteObject.height + 2
-    );
+    // make sure we actually have a health bar
+    if (this.healthBar != undefined) {
+      // put 2px it under the player
+      this.healthBar.position.set(
+        this.spriteObject.x,
+        this.spriteObject.y + this.spriteObject.height + 2
+      );
 
-    // change size of green to represent current health
-    this.frontHealthBar.width = (this.health * this.rearHealthBar.width) / 100;
+      // change size of green to represent current health
+      this.frontHealthBar.width =
+        (this.health * this.rearHealthBar.width) / 100;
+    }
+  }
+
+  // runs every frame
+  public tick() {
+    this.updateHealthBar();
+
+    // uh oh spaghettios we're dead
+    if (this.health <= 0) {
+      this.health = 0; // prevents the healthbar from descending into deader-than-dead
+      this.state = State.DEAD;
+      statusDiv.innerHTML = "Uh-oh spaghetti-o's! You're <b>dead.</b><br/>";
+    }
   }
 }

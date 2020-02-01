@@ -67,8 +67,8 @@ let gameLoop = function(delta: any) {
   playerSprite.x += player.velX * delta;
   playerSprite.y += player.velY * delta;
 
-  // update player's health bar
-  player.updateHealthBar();
+  // make sure player does all of its per-frame crap
+  player.tick();
 };
 
 // this won't run until after our assets have loaded
