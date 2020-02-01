@@ -36,7 +36,7 @@ export class Player extends Entity {
         // make sure we're not checking ourselves (which would wreck ourselves)
         // also are we colliding with it?
         if (
-          entity.spriteObject.name != "player" &&
+          entity.spriteObject.name == "enemy" &&
           checkSpriteCollision(tthis.spriteObject, entity.spriteObject)
         ) {
           tthis.health -= 1;
