@@ -74,7 +74,7 @@ let gameLoop = function(delta: any) {
 // this won't run until after our assets have loaded
 let setup = function() {
   // clear our status thingy
-  statusDiv.innerHTML = "";
+  statusDiv.innerHTML = "<br/>";
 
   // run this for each asset we have loaded
   assets.forEach(function(asset) {
