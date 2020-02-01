@@ -87,7 +87,7 @@ app.loader
     // Begin game init
 
     // clear our status thingy
-    statusDiv.innerHTML = "<br/>";
+    statusDiv.innerHTML = "Press B to deplete health";
 
     // run this for each asset we have loaded
     assets.forEach(function(asset) {
