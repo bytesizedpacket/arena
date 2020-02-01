@@ -77,51 +77,50 @@ let gameLoop = function(delta: any) {
   player.tick();
 };
 
-// this won't run until after our assets have loaded
-let setup = function() {
-  // clear our status thingy
-  statusDiv.innerHTML = "<br/>";
-
-  // run this for each asset we have loaded
-  assets.forEach(function(asset) {
-    // create the sprite object
-    let currentSprite = new PIXI.Sprite(
-      app.loader.resources[asset.name].texture
-    );
-
-    // this is the player!
-    if (asset.name == "player") {
-      // set up player object with this sprite
-      player = new Player(currentSprite, app);
-
-      // put sprite in the center of the stage
-      currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
-      currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
-    }
-
-    // populate our sprite array with this
-    sprites.push(currentSprite);
-
-    // add sprite to stage
-    app.stage.addChild(currentSprite);
-
-    // scale view
-    app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
-    app.stage.scale.set(zoomScale, zoomScale);
-
-    // begin game loop
-    gameState = gameLoop;
-    app.ticker.add(delta => tick(delta));
-  });
-};
-
 // begin loading assets
 app.loader
   .add(assets)
   .on("progress", function() {
     statusDiv.innerHTML = app.loader.progress + "% Loading...<br/>";
   })
-  .load(setup);
+  .load(function() {
+    // Begin game init
+
+    // clear our status thingy
+    statusDiv.innerHTML = "<br/>";
+
+    // run this for each asset we have loaded
+    assets.forEach(function(asset) {
+      // create the sprite object
+      let currentSprite = new PIXI.Sprite(
+        app.loader.resources[asset.name].texture
+      );
+
+      // this is the player!
+      if (asset.name == "player") {
+        // set up player object with this sprite
+        player = new Player(currentSprite, app);
+
+        // put sprite in the center of the stage
+        currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
+        currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
+      }
+
+      // populate our sprite array with this
+      sprites.push(currentSprite);
+
+      // add sprite to stage
+      app.stage.addChild(currentSprite);
+
+      // scale view
+      app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
+      app.stage.scale.set(zoomScale, zoomScale);
+
+      // begin game loop
+      gameState = gameLoop;
+      app.ticker.add(delta => tick(delta));
+    });
+  });
 
 // keeps all of our shit running
 let tick = function(delta: any) {
