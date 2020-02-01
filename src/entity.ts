@@ -16,7 +16,7 @@ export class Entity {
   public frontHealthBar: Graphics;
   public state: State;
   public health: number = 100;
-  public speed: number; // default 2 if not specified
+  public speed: number; // default 1 if not specified
   public velX: number = 0; // velocity X
   public velY: number = 0; // velocity Y
 
@@ -31,7 +31,7 @@ export class Entity {
     if (speed) {
       this.speed = speed;
     } else {
-      this.speed = 2;
+      this.speed = 1;
     }
 
     this.velX = 0;
@@ -62,11 +62,11 @@ export class Entity {
     this.state = State.ACTIVE;
   }
 
-  // keep healthbar under player and displaying correct amount of health
+  // keep healthbar under entity and displaying correct amount of health
   public updateHealthBar() {
     // make sure we actually have a health bar
     if (this.healthBar != undefined) {
-      // put 2px it under the player
+      // put 2px it under the entity
       this.healthBar.position.set(
         this.spriteObject.x,
         this.spriteObject.y + this.spriteObject.height + 2
