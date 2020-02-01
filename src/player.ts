@@ -1,6 +1,8 @@
 ///<reference types="pixi.js"/>
-import * as PIXI from "pixi.js";
-// TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
+import { Sprite } from "pixi.js";
+import { Graphics } from "pixi.js";
+import { Container } from "pixi.js";
+import { Application } from "pixi.js";
 
 // useful variables
 let statusDiv = document.getElementById("status");
@@ -12,10 +14,10 @@ export enum State {
 // TODO: create generic Entity class and have player extend it
 // main player object
 export class Player {
-  public spriteObject: PIXI.Sprite;
-  public healthBar: PIXI.Container;
-  public rearHealthBar: PIXI.Graphics;
-  public frontHealthBar: PIXI.Graphics;
+  public spriteObject: Sprite;
+  public healthBar: Container;
+  public rearHealthBar: Graphics;
+  public frontHealthBar: Graphics;
   public state: State;
   public health: number = 100;
   public speed: number; // default 2 if not specified
@@ -23,8 +25,8 @@ export class Player {
   public velY: number = 0; // velocity Y
 
   constructor(
-    spriteObject: PIXI.Sprite,
-    app: PIXI.Application,
+    spriteObject: Sprite,
+    app: Application,
     speed?: number,
     displayHealthBar?: boolean
   ) {
@@ -41,17 +43,17 @@ export class Player {
 
     // set up our health bar (enabled by default)
     if (displayHealthBar == undefined || displayHealthBar) {
-      this.healthBar = new PIXI.Container();
+      this.healthBar = new Container();
 
       // create the back red rectangle
-      this.rearHealthBar = new PIXI.Graphics();
+      this.rearHealthBar = new Graphics();
       this.rearHealthBar.beginFill(0xff3300);
       this.rearHealthBar.drawRect(0, 0, this.spriteObject.width, 2); // same width as the sprite
       this.rearHealthBar.endFill();
       this.healthBar.addChild(this.rearHealthBar);
 
       //Create the front green rectangle
-      this.frontHealthBar = new PIXI.Graphics();
+      this.frontHealthBar = new Graphics();
       this.frontHealthBar.beginFill(0x00ff00);
       this.frontHealthBar.drawRect(0, 0, this.spriteObject.width, 2);
       this.frontHealthBar.endFill();
