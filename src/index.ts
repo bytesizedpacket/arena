@@ -29,7 +29,7 @@ let assets = [
 export let entities: Entity[] = []; // this will be populated later
 
 // setup pixi
-let app = new PIXI.Application({ width: gameWidth, height: gameHeight });
+export let app = new PIXI.Application({ width: gameWidth, height: gameHeight });
 document.body.appendChild(app.view);
 
 // disable rightclicking
@@ -92,6 +92,9 @@ app.loader
   .load(function() {
     // Set up a new game
 
+    // make stage interactable
+    app.stage.interactive = true;
+
     // clear our status thingy
     statusDiv.innerHTML = "Press B to deplete health";
 
@@ -104,6 +107,9 @@ app.loader
 
       // keep this consistent
       currentSprite.name = asset.name;
+
+      // make sure we can click it
+      currentSprite.interactive = true;
 
       switch (asset.name) {
         case "player":

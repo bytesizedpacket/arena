@@ -60,6 +60,14 @@ export class Entity {
 
     // initiate as alive
     this.state = State.ACTIVE;
+
+    // make it clickable (calls this.onClick)
+    // this is jank
+    // also, this is jank
+    let tthis = this;
+    this.spriteObject.on("mousedown", function(e: any) {
+      tthis.onClick(e);
+    });
   }
 
   // keep healthbar under entity and displaying correct amount of health
@@ -87,5 +95,10 @@ export class Entity {
       this.health = 0; // prevents the healthbar from descending into deader-than-dead
       this.state = State.DEAD;
     }
+  }
+
+  // it has been clicked!
+  public onClick(e?: any) {
+    console.log(this);
   }
 }
