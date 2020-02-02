@@ -9,8 +9,7 @@ let statusDiv = document.getElementById("status");
 
 // main player object
 export class Player extends Entity {
-  spriteObject: Sprite = this.spriteObject;
-  public score: number;
+  public score: number = 0;
   constructor(
     spriteObject: Sprite,
     app: Application,
