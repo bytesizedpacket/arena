@@ -41,6 +41,9 @@ app.view.addEventListener("contextmenu", e => {
 
 // main gameplay loop
 let gameLoop = function(delta: any) {
+  // TODO: implement levels
+  // TODO: implement enemy generation based on current level
+
   // only if the player is alive...
   if (player.state == State.ACTIVE) {
     // handle input!
@@ -67,17 +70,16 @@ let gameLoop = function(delta: any) {
     } else {
       if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
     }
-
-    // move all of our entities
-    entities.forEach(function(entity: Entity) {
-      entity.spriteObject.x += entity.velX * delta;
-      entity.spriteObject.y += entity.velY * delta;
-    });
   }
-
   // make sure every entity handles their ticks
   entities.forEach(function(entity: Entity) {
-    entity.tick();
+    // don't tick it if it's inactive
+    if (entity.state != State.INACTIVE) {
+      // move em
+      entity.spriteObject.x += entity.velX * delta;
+      entity.spriteObject.y += entity.velY * delta;
+      entity.tick(); // tock
+    }
   });
 };
 
@@ -121,7 +123,7 @@ app.loader
           currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
           break;
         case "enemy":
-          // TODO: spawn multiple enemies and place them accordingly
+          // TODO: make this an inactive 'reference' enemy that the main game loop clones from when we're setting up a level
           let enemy = new Enemy(currentSprite, app, 0.7); // make them slightly slower than the player
           entities.push(enemy);
 

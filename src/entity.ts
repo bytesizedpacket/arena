@@ -5,7 +5,8 @@ import { Application } from "pixi.js";
 
 export enum State {
   ACTIVE,
-  DEAD
+  INACTIVE, // won't move or do anything
+  DEAD // will remove itself from the game/memory
 }
 
 // generic entity class
@@ -87,6 +88,7 @@ export class Entity {
   }
 
   // runs every frame
+  // this DOES NOT GET CALLED if the state is INACTIVE
   public tick() {
     this.updateHealthBar();
 
