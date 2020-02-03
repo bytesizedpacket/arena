@@ -47,8 +47,9 @@ let initLevel = function(delta?: any) {
   levelDiv.innerHTML = "<b>LEVEL " + currentLevel + "</b>";
   switch (currentLevel) {
     case 1:
-      // yay it's level 1
-
+    // yay it's level 1
+    // fall throguh to default for now so it keeps going forever
+    default:
       // create 3 enemies
       for (let i = 0; i < 3; i++) {
         let currentEnemy = createEnemy(0.75);
@@ -69,9 +70,6 @@ let initLevel = function(delta?: any) {
             break;
         }
       }
-      break;
-    default:
-      // infinitely repeat this for later levels
       break;
   }
 
