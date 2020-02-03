@@ -197,6 +197,11 @@ app.loader
     app.renderer.resize(viewWidth * zoomScale, viewHeight * zoomScale);
     app.stage.scale.set(zoomScale, zoomScale);
 
+    // center
+    app.view.style.position = "absolute";
+    app.view.style.left =
+      ((window.innerWidth - app.renderer.width) >> 1) + "px";
+
     // begin game loop
     gameState = initLevel;
     app.ticker.add(delta => tick(delta));
