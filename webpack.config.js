@@ -14,7 +14,6 @@ if (mode == "production") {
 module.exports = {
   mode: mode,
   entry: path.join(__dirname, "src", "index.ts"),
-  watch: true,
   plugins: [
     new CopyWebpackPlugin([
       {
