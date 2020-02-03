@@ -13,11 +13,13 @@ import { Enemy } from "./enemy";
 // aliases and helpful variables
 const urlParams = new URLSearchParams(window.location.search);
 let statusDiv = document.getElementById("status");
+let levelDiv = document.getElementById("level");
 
 // game properties
 let gameWidth: number = 256;
 let gameHeight: number = 256;
 let zoomScale: number = parseInt(urlParams.get("zoom")); // URL query parameter ?zoom=_
+export let currentLevel: number = 1;
 if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
 let gameState: Function;
 export let player: Player;
@@ -39,11 +41,47 @@ app.view.addEventListener("contextmenu", e => {
   if (e.type == "contextmenu") e.preventDefault();
 });
 
+// initialize a new level
+let initLevel = function(delta?: any) {
+  // TODO: implement enemy generation based on current level
+  if (!currentLevel) currentLevel = 1; // default to 1 if not set
+  levelDiv.innerHTML = "<b>LEVEL " + currentLevel + "</b>";
+  switch (currentLevel) {
+    case 1:
+      // yay it's level 1
+
+      // create 3 enemies
+      for (let i = 0; i < 3; i++) {
+        let currentEnemy = createEnemy(0.75);
+
+        switch (i) {
+          case 0:
+            // do nothing (starts at 0,0)
+            break;
+          case 1:
+            // put it halfway down the screen
+            currentEnemy.spriteObject.y =
+              gameHeight / 2 - currentEnemy.spriteObject.height / 2;
+            break;
+          case 2:
+            // put it at the bottom
+            currentEnemy.spriteObject.y =
+              gameHeight - currentEnemy.spriteObject.height;
+            break;
+        }
+      }
+      break;
+    default:
+      // infinitely repeat this for later levels
+      break;
+  }
+
+  // set the gameState to gameLoop;
+  gameState = gameLoop;
+};
+
 // main gameplay loop
 let gameLoop = function(delta: any) {
-  // TODO: implement levels
-  // TODO: implement enemy generation based on current level
-
   // only if the player is alive...
   if (player.state == State.ACTIVE) {
     // handle input!
@@ -71,6 +109,9 @@ let gameLoop = function(delta: any) {
       if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
     }
   }
+
+  let enemyCheck = false; // do we have any enemies?
+
   // make sure every entity handles their ticks
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
@@ -79,8 +120,17 @@ let gameLoop = function(delta: any) {
       entity.spriteObject.x += entity.velX * delta;
       entity.spriteObject.y += entity.velY * delta;
       entity.tick(); // tock
+
+      // is this an enemy?
+      if (entity instanceof Enemy) enemyCheck = true;
     }
   });
+
+  // if there are no enemies left, set up a new level
+  if (!enemyCheck) {
+    currentLevel = currentLevel + 1;
+    gameState = initLevel;
+  }
 };
 
 // begin loading assets
@@ -101,44 +151,36 @@ app.loader
 
     // run this for each asset we have loaded
     assets.forEach(function(asset) {
-      // create the sprite object
-      let currentSprite = new PIXI.Sprite(
-        app.loader.resources[asset.name].texture
-      );
+      // enemies are created later
+      if (asset.name == "player") {
+        // create the sprite object
+        let currentSprite = new PIXI.Sprite(
+          app.loader.resources[asset.name].texture
+        );
 
-      // keep this consistent
-      currentSprite.name = asset.name;
+        // keep this consistent
+        currentSprite.name = asset.name;
 
-      // make sure we can click it
-      currentSprite.interactive = true;
+        // make sure we can click it
+        currentSprite.interactive = true;
 
-      switch (asset.name) {
-        case "player":
-          // set up player object with this sprite
-          player = new Player(currentSprite, app);
-          entities.push(player);
+        // set up player object with this sprite
+        player = new Player(currentSprite, app);
+        entities.push(player);
 
-          // put sprite in the center of the stage
-          currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
-          currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
-          break;
-        case "enemy":
-          // TODO: make this an inactive 'reference' enemy that the main game loop clones from when we're setting up a level
-          let enemy = new Enemy(currentSprite, app, 0.7); // make them slightly slower than the player
-          entities.push(enemy);
-
-          break;
+        // put sprite in the center of the stage
+        currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
+        currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
+        // add sprite to stage
+        app.stage.addChild(currentSprite);
       }
-
-      // add sprite to stage
-      app.stage.addChild(currentSprite);
 
       // scale view
       app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
       app.stage.scale.set(zoomScale, zoomScale);
 
       // begin game loop
-      gameState = gameLoop;
+      gameState = initLevel;
       app.ticker.add(delta => tick(delta));
     });
   });
@@ -205,4 +247,22 @@ export let checkSpriteCollision = function(
 
   //`hit` will be either `true` or `false`
   return hit;
+};
+
+let createEnemy = function(speed?: number, displayHealthBar?: boolean): Enemy {
+  let currentSprite = new PIXI.Sprite(app.loader.resources["enemy"].texture);
+
+  // keep this consistent
+  currentSprite.name = "enemy";
+
+  // make sure we can click it
+  currentSprite.interactive = true;
+
+  let enemy = new Enemy(currentSprite, app, speed, displayHealthBar); // make them slightly slower than the player
+
+  // add sprite to stage
+  entities.push(enemy);
+  app.stage.addChild(currentSprite);
+
+  return enemy;
 };
