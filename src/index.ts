@@ -113,9 +113,33 @@ let gameLoop = function(delta: any) {
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
     if (entity.state != State.INACTIVE) {
-      // move em
-      entity.spriteObject.x += entity.velX * delta;
-      entity.spriteObject.y += entity.velY * delta;
+      // we need to check if theit potential movement is outside the map boundary
+      let tempX = entity.spriteObject.x + entity.velX * delta;
+      let tempY = entity.spriteObject.y + entity.velY * delta;
+
+      // constrain it to the map if so
+      // also set velocity to 0 so they turn around quicker
+      if (tempX < 0) {
+        tempX = 0;
+        entity.velX = 0;
+      }
+      if (tempY < 0) {
+        tempY = 0;
+        entity.velY = 0;
+      }
+      if (tempX > gameWidth - entity.spriteObject.width) {
+        tempX = gameWidth - entity.spriteObject.width;
+        entity.velX = 0;
+      }
+      if (tempY > gameHeight - entity.spriteObject.height) {
+        tempY = gameHeight - entity.spriteObject.height;
+        entity.velY = 0;
+      }
+
+      // now move them
+      entity.spriteObject.x = tempX;
+      entity.spriteObject.y = tempY;
+
       entity.tick(); // tock
 
       // is this an enemy?
