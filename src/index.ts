@@ -16,8 +16,8 @@ let statusDiv = document.getElementById("status");
 let levelDiv = document.getElementById("level");
 
 // game properties
-let gameWidth: number = 256;
-let gameHeight: number = 256;
+let viewWidth: number = 256;
+let viewHeight: number = 256;
 let zoomScale: number = parseInt(urlParams.get("zoom")); // URL query parameter ?zoom=_
 export let currentLevel: number = 1;
 if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
@@ -35,7 +35,7 @@ let assets = [
 export let entities: Entity[] = []; // this will be populated later
 
 // setup pixi
-export let app = new PIXI.Application({ width: gameWidth, height: gameHeight });
+export let app = new PIXI.Application({ width: viewWidth, height: viewHeight });
 document.body.appendChild(app.view);
 
 // disable rightclicking
@@ -70,12 +70,12 @@ let initLevel = function(delta?: any) {
           case 1:
             // put it halfway down the screen
             currentEnemy.spriteObject.y =
-              gameHeight / 2 - currentEnemy.spriteObject.height / 2;
+              viewHeight / 2 - currentEnemy.spriteObject.height / 2;
             break;
           case 2:
             // put it at the bottom
             currentEnemy.spriteObject.y =
-              gameHeight - currentEnemy.spriteObject.height;
+              viewHeight - currentEnemy.spriteObject.height;
             break;
         }
       }
@@ -123,6 +123,7 @@ let gameLoop = function(delta: any) {
     // don't tick it if it's inactive
     if (entity.state != STATE.INACTIVE) {
       // we need to check if theit potential movement is outside the map boundary
+      // TODO: change all entity.spriteObject.x/y to a property of the entity itself so we can have the camera render separately
       let tempX = entity.spriteObject.x + entity.velX * delta;
       let tempY = entity.spriteObject.y + entity.velY * delta;
 
@@ -136,12 +137,13 @@ let gameLoop = function(delta: any) {
         tempY = 0;
         entity.velY = 0;
       }
-      if (tempX > gameWidth - entity.spriteObject.width) {
-        tempX = gameWidth - entity.spriteObject.width;
+      // TODO: constrain these to map instead of screen size
+      if (tempX > viewWidth - entity.spriteObject.width) {
+        tempX = viewWidth - entity.spriteObject.width;
         entity.velX = 0;
       }
-      if (tempY > gameHeight - entity.spriteObject.height) {
-        tempY = gameHeight - entity.spriteObject.height;
+      if (tempY > viewHeight - entity.spriteObject.height) {
+        tempY = viewHeight - entity.spriteObject.height;
         entity.velY = 0;
       }
 
@@ -192,7 +194,7 @@ app.loader
     app.stage.addChild(player.spriteObject);
 
     // scale view
-    app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
+    app.renderer.resize(viewWidth * zoomScale, viewHeight * zoomScale);
     app.stage.scale.set(zoomScale, zoomScale);
 
     // begin game loop
@@ -209,6 +211,7 @@ let tick = function(delta: any) {
 };
 
 // check for collision between two sprites
+// TODO: adjust for entity position property collision instead of PIXI.Sprite
 export let checkSpriteCollision = function(
   sprite1: PIXI.Sprite,
   sprite2: PIXI.Sprite
