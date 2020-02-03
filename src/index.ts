@@ -10,10 +10,15 @@ import { Player } from "./player";
 import { Enemy } from "./enemy";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
+// aliases and helpful variables
+const urlParams = new URLSearchParams(window.location.search);
+let statusDiv = document.getElementById("status");
+
 // game properties
 let gameWidth: number = 256;
 let gameHeight: number = 256;
-let zoomScale: number = 1; // how much to zoom the viewport
+let zoomScale: number = parseInt(urlParams.get("zoom")); // URL query parameter ?zoom=_
+if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
 let gameState: Function;
 export let player: Player;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
