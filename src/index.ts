@@ -145,31 +145,27 @@ let gameLoop = function(delta: any) {
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
     if (entity.state != STATE.INACTIVE) {
-      // hold onto these since we're gonna keep things on the map
-      let prevX = entity.spriteObject.x;
-      let prevY = entity.spriteObject.y;
-
-      entity.tick(); // tock
-
       // constrain it to the map
       // also set velocity to 0 so they turn around quicker
       if (entity.spriteObject.x < 0) {
-        entity.spriteObject.x = prevX;
+        entity.spriteObject.x = 0;
         entity.velX = 0;
       }
       if (entity.spriteObject.y < 0) {
-        entity.spriteObject.y = prevY;
+        entity.spriteObject.y = 0;
         entity.velY = 0;
       }
       // TODO: constrain these to map instead of screen size
       if (entity.spriteObject.x > viewWidth - entity.spriteObject.width) {
-        entity.spriteObject.x = prevX;
+        entity.spriteObject.x = viewWidth - entity.spriteObject.width;
         entity.velX = 0;
       }
       if (entity.spriteObject.y > viewHeight - entity.spriteObject.height) {
-        entity.spriteObject.y = prevY;
+        entity.spriteObject.y = viewHeight - entity.spriteObject.height;
         entity.velY = 0;
       }
+
+      entity.tick(); // tock
 
       // is this an enemy?
       if (entity instanceof Enemy) enemyCheck = true;
