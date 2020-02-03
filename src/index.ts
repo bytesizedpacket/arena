@@ -41,8 +41,6 @@ app.view.addEventListener("contextmenu", e => {
 
 // main gameplay loop
 let gameLoop = function(delta: any) {
-  let playerSprite = player.spriteObject;
-
   // only if the player is alive...
   if (player.state == State.ACTIVE) {
     // handle input!
@@ -70,9 +68,11 @@ let gameLoop = function(delta: any) {
       if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
     }
 
-    // actually move the sprite
-    playerSprite.x += player.velX * delta;
-    playerSprite.y += player.velY * delta;
+    // move all of our entities
+    entities.forEach(function(entity: Entity) {
+      entity.spriteObject.x += entity.velX * delta;
+      entity.spriteObject.y += entity.velY * delta;
+    });
   }
 
   // make sure every entity handles their ticks
