@@ -58,25 +58,34 @@ export class Enemy extends Entity {
       this.spriteObject.x += this.velX * currentDelta;
       this.spriteObject.y += this.velY * currentDelta;
 
-      // are we now intersecting with something?
-      let tthis = this; // gotta work around this jank lol
-      entities.forEach(function(entityB: Entity) {
-        if (entityB instanceof Enemy && entityB != tthis) {
-          if (checkSpriteCollision(entityB.spriteObject, tthis.spriteObject)) {
-            let toEnemyX = entityB.spriteObject.x - tthis.spriteObject.x;
-            let toEnemyY = entityB.spriteObject.y - tthis.spriteObject.y;
-            let toEnemyLength = Math.sqrt(
-              toEnemyX * toEnemyX + toEnemyY * toEnemyY
-            );
-            toEnemyX = toEnemyX / toEnemyLength;
-            toEnemyY = toEnemyY / toEnemyLength;
+      // don't do this if we can fly
+      if (this.movementType != MOVEMENT_TYPE.FLY) {
+        // are we now intersecting with something?
+        let tthis = this; // gotta work around this jank lol
+        entities.forEach(function(entityB: Entity) {
+          if (
+            entityB instanceof Enemy &&
+            entityB != tthis &&
+            entityB.movementType != MOVEMENT_TYPE.FLY
+          ) {
+            if (
+              checkSpriteCollision(entityB.spriteObject, tthis.spriteObject)
+            ) {
+              let toEnemyX = entityB.spriteObject.x - tthis.spriteObject.x;
+              let toEnemyY = entityB.spriteObject.y - tthis.spriteObject.y;
+              let toEnemyLength = Math.sqrt(
+                toEnemyX * toEnemyX + toEnemyY * toEnemyY
+              );
+              toEnemyX = toEnemyX / toEnemyLength;
+              toEnemyY = toEnemyY / toEnemyLength;
 
-            // move AWAY from the enemy for a frame
-            tthis.velX = toEnemyX * -1 * tthis.speed;
-            tthis.velY = toEnemyY * -1 * tthis.speed;
+              // move AWAY from the enemy for a frame
+              tthis.velX = toEnemyX * -1 * tthis.speed;
+              tthis.velY = toEnemyY * -1 * tthis.speed;
+            }
           }
-        }
-      });
+        });
+      }
 
       // we don't *actually* move the entity here, we leave this to the main game loop
       this.spriteObject.position.set(prevX, prevY);
