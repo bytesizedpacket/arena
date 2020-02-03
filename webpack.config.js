@@ -11,6 +11,29 @@ if (mode == "production") {
   let isProd = true;
 }
 
+let ooptimization;
+
+if (isProd) {
+  ooptimizaiton = {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        sourceMap: true,
+        terserOptions: {
+          mangle: true,
+          output: { comments: false }
+        },
+        extractComments: false
+      })
+    ]
+  };
+} else {
+  ooptimization = {
+    minimize: false
+  };
+}
+
 module.exports = {
   mode: mode,
   entry: path.join(__dirname, "src", "index.ts"),
@@ -27,20 +50,7 @@ module.exports = {
       favicon: "src/assets/favicon.ico"
     })
   ],
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        sourceMap: true,
-        terserOptions: {
-          mangle: true,
-          output: { comments: false }
-        },
-        extractComments: false
-      })
-    ]
-  },
+  optimization: ooptimization,
   output: {
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
