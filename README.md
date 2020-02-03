@@ -12,3 +12,5 @@ Made with PIXI.JS, Typescript, and Webpack.
 - Use `npm run-script start` to run a webserver at localhost:8080 that will automatically recompile and refresh when you save any source file.
 
 A live build is running at [floof.monster](https://floof.monster/). This automatically updates itself from the most recent commit on the master branch of this repository.
+
+This project currently uses icons from [Pixeltier's Modern RPG Icon Pack](https://pixeltier.itch.io/pixeltiers-modern-rpg-icon-set), as well as [Justin's 16x16 Icon Pack](https://zeromatrix.itch.io/rpgiab-icons), which is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).

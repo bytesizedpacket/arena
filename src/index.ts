@@ -31,7 +31,8 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 let assets = [
   { name: "player", url: "assets/sprites/player.png" },
   { name: "enemy-default", url: "assets/sprites/enemy-default.png" },
-  { name: "enemy-fly", url: "assets/sprites/enemy-fly.png" }
+  { name: "enemy-fly", url: "assets/sprites/enemy-fly.png" },
+  { name: "health", url: "assets/sprites/health.png" }
 ];
 export let entities: Entity[] = []; // this will be populated later
 
