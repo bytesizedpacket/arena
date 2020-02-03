@@ -185,7 +185,6 @@ app.loader
 
     // set up player object
     player = new Player("player", app);
-    entities.push(player);
 
     // put sprite in the center of the stage
     player.spriteObject.x =
@@ -289,10 +288,6 @@ let createEnemy = function(
   movementType?: MOVEMENT_TYPE
 ): Enemy {
   let enemy = new Enemy(spriteName, app, speed, displayHealthBar, movementType);
-
-  // add sprite to stage
-  entities.push(enemy);
-  app.stage.addChild(enemy.spriteObject);
 
   return enemy;
 };

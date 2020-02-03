@@ -104,6 +104,10 @@ export class Entity {
     this.spriteObject.on("mousedown", function(e: any) {
       tthis.onClick(e);
     });
+
+    // add it to the game
+    app.stage.addChild(this.spriteObject);
+    entities.push(this);
   }
 
   // keep healthbar under entity and displaying correct amount of health
@@ -143,9 +147,11 @@ export class Entity {
   // destroy this entity from the game :c
   public destroy() {
     app.stage.removeChild(this.spriteObject);
-    app.stage.removeChild(this.healthBar);
+    if (this.healthBar) {
+      app.stage.removeChild(this.healthBar);
+      this.healthBar.destroy();
+    }
     entities.splice(entities.indexOf(this), 1);
-    this.healthBar.destroy();
     this.spriteObject.destroy();
   }
 }
