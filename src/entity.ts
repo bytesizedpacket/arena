@@ -26,7 +26,7 @@ export class Entity {
   public frontHealthBar: Graphics;
   public state: STATE;
   public health: number = 100;
-  public speed: number; // default 1 if not specified
+  public speed: number;
   public velX: number = 0; // velocity X
   public velY: number = 0; // velocity Y
 
@@ -48,11 +48,14 @@ export class Entity {
 
     this.spriteObject = currentSprite;
 
+    // default to 2 speed if not specified
     if (speed) {
       this.speed = speed;
     } else {
       this.speed = 1;
     }
+
+    this.speed = this.speed * 2; // since 1 is too slow, but I like 1 being the player speed
 
     this.velX = 0;
     this.velY = 0;

@@ -46,10 +46,12 @@ export class Enemy extends Entity {
           this.velY = toPlayerY * this.speed;
           break;
         case MOVEMENT_TYPE.FLY:
-          this.velX += (toPlayerX * this.speed) / 50;
-          this.velY += (toPlayerY * this.speed) / 50;
+          this.velX += (toPlayerX * this.speed) / 15;
+          this.velY += (toPlayerY * this.speed) / 15;
           break;
       }
+
+      // we don't *actually* move the entity here, we leave this to the main game loop
     }
   }
 
