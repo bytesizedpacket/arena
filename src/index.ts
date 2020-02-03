@@ -4,10 +4,11 @@ import * as PIXI from "pixi.js";
 import * as Keyboard from "pixi.js-keyboard";
 // @ts-ignore
 import * as Mouse from "pixi.js-mouse";
-import { Entity } from "./entity";
-import { STATE, MOVEMENT_TYPE } from "./entity";
-import { Player } from "./player";
-import { Enemy } from "./enemy";
+import { Entity } from "./Entity";
+import { STATE, MOVEMENT_TYPE } from "./Entity";
+import { Player } from "./Player";
+import { Enemy } from "./Enemy";
+import { HealthPack } from "./HealthPack";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // aliases and helpful variables
@@ -29,10 +30,10 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 // these are our assets
 let assets = [
-  { name: "player", url: "assets/sprites/player.png" },
-  { name: "enemy-default", url: "assets/sprites/enemy-default.png" },
-  { name: "enemy-fly", url: "assets/sprites/enemy-fly.png" },
-  { name: "health", url: "assets/sprites/health.png" }
+  { name: "player", url: "assets/sprites/Player.png" },
+  { name: "enemy-default", url: "assets/sprites/Enemy-default.png" },
+  { name: "enemy-fly", url: "assets/sprites/Enemy-fly.png" },
+  { name: "healthpack", url: "assets/sprites/HealthPack.png" }
 ];
 export let entities: Entity[] = []; // this will be populated later
 
@@ -88,6 +89,18 @@ let initLevel = function(delta?: any) {
               viewHeight - currentEnemy.spriteObject.height;
             break;
         }
+      }
+
+      // are we on a prime numbered level?
+      if (isPrime(currentLevel)) {
+        // yes - generate a health pack somewhere
+        let healthPack = new HealthPack("healthpack", app);
+        let pos = {
+          x: getRandomInt(0, viewWidth - healthPack.spriteObject.width - 1),
+          y: getRandomInt(0, viewHeight - healthPack.spriteObject.height - 1)
+        };
+        healthPack.spriteObject.position.set(pos.x, pos.y);
+        // TODO: make it use world position instead of screen position
       }
       break;
   }
@@ -299,3 +312,21 @@ let createEnemy = function(
 
   return enemy;
 };
+
+// check if a number is prime
+function isPrime(num: number): boolean {
+  for (var i = 2; i < num; i++) if (num % i === 0) return false;
+  return num > 1;
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive).
+ * The value is no lower than min (or the next integer greater than min
+ * if min isn't an integer) and no greater than max (or the next integer
+ * lower than max if max isn't an integer).
+ */
+function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}

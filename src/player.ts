@@ -1,9 +1,10 @@
+import { HealthPack } from "./HealthPack";
 import { Sprite } from "pixi.js";
 import { Application } from "pixi.js";
 import { entities } from "./index";
 import { checkSpriteCollision } from "./index";
-import { Entity } from "./entity";
-import { Enemy } from "./enemy";
+import { Entity } from "./Entity";
+import { Enemy } from "./Enemy";
 
 // useful variables
 let statusDiv = document.getElementById("status");
@@ -35,11 +36,16 @@ export class Player extends Entity {
       entities.forEach(function(entity: Entity) {
         // make sure we're not checking ourselves (which would wreck ourselves)
         // also are we colliding with it?
-        if (
-          entity instanceof Enemy &&
-          checkSpriteCollision(tthis.spriteObject, entity.spriteObject)
-        ) {
-          tthis.health -= 1;
+        if (checkSpriteCollision(tthis.spriteObject, entity.spriteObject)) {
+          switch (entity.constructor) {
+            case Enemy:
+              tthis.health -= 1;
+              break;
+            case HealthPack:
+              tthis.health = 100;
+              entity.destroy();
+              break;
+          }
         }
       });
     }
