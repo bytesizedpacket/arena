@@ -21,6 +21,7 @@ let viewHeight: number = 256;
 let zoomScale: number = parseInt(urlParams.get("zoom")); // URL query parameter ?zoom=_
 export let currentLevel: number = 1;
 if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
+// TODO: if zoom level isn't specified, automatically determine largest possible zoom level (also put this in window.onresize)
 let gameState: Function;
 export let player: Player;
 export let currentDelta = 0;
@@ -201,6 +202,13 @@ app.loader
     app.view.style.position = "absolute";
     app.view.style.left =
       ((window.innerWidth - app.renderer.width) >> 1) + "px";
+
+    // keep centered on resize
+    window.onresize = function(event: Event) {
+      app.view.style.position = "absolute";
+      app.view.style.left =
+        ((window.innerWidth - app.renderer.width) >> 1) + "px";
+    };
 
     // begin game loop
     gameState = initLevel;
