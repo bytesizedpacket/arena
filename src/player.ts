@@ -3,6 +3,7 @@ import { Application } from "pixi.js";
 import { entities } from "./index";
 import { checkSpriteCollision } from "./index";
 import { Entity } from "./entity";
+import { Enemy } from "./enemy";
 
 // useful variables
 let statusDiv = document.getElementById("status");
@@ -11,12 +12,12 @@ let statusDiv = document.getElementById("status");
 export class Player extends Entity {
   public score: number = 0;
   constructor(
-    spriteObject: Sprite,
+    spriteName: string,
     app: Application,
     speed?: number,
     displayHealthBar?: boolean
   ) {
-    super(spriteObject, app, speed, displayHealthBar);
+    super(spriteName, app, speed, displayHealthBar);
     console.log("Player has been initialized", this);
   }
 
@@ -35,7 +36,7 @@ export class Player extends Entity {
         // make sure we're not checking ourselves (which would wreck ourselves)
         // also are we colliding with it?
         if (
-          entity.spriteObject.name == "enemy" &&
+          entity instanceof Enemy &&
           checkSpriteCollision(tthis.spriteObject, entity.spriteObject)
         ) {
           tthis.health -= 1;

@@ -8,13 +8,13 @@ import { entities } from "./index";
 // main enemy object
 export class Enemy extends Entity {
   constructor(
-    spriteObject: Sprite,
+    spriteName: string,
     app: Application,
     speed?: number,
     displayHealthBar?: boolean,
     movementType?: MOVEMENT_TYPE
   ) {
-    super(spriteObject, app, speed, displayHealthBar, movementType);
+    super(spriteName, app, speed, displayHealthBar, movementType);
   }
 
   // this will run every frame

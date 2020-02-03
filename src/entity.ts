@@ -31,13 +31,22 @@ export class Entity {
   public velY: number = 0; // velocity Y
 
   constructor(
-    spriteObject: Sprite,
+    spriteName: string,
     app: Application,
     speed?: number,
     displayHealthBar?: boolean,
     movementType?: MOVEMENT_TYPE
   ) {
-    this.spriteObject = spriteObject;
+    // create our sprite with the given name
+    let currentSprite = new Sprite(app.loader.resources[spriteName].texture);
+
+    // keep this consistent
+    currentSprite.name = spriteName;
+
+    // make sure we can click it
+    currentSprite.interactive = true;
+
+    this.spriteObject = currentSprite;
 
     if (speed) {
       this.speed = speed;

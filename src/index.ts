@@ -28,7 +28,8 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 // these are our assets
 let assets = [
   { name: "player", url: "assets/sprites/player.png" },
-  { name: "enemy", url: "assets/sprites/enemy.png" }
+  { name: "enemy-default", url: "assets/sprites/enemy-default.png" },
+  { name: "enemy-fly", url: "assets/sprites/enemy-fly.png" }
 ];
 export let entities: Entity[] = []; // this will be populated later
 
@@ -56,9 +57,9 @@ let initLevel = function(delta?: any) {
 
         // the middle enemy will have fly movement
         if (i == 1) {
-          currentEnemy = createEnemy(1, true, MOVEMENT_TYPE.FLY);
+          currentEnemy = createEnemy("enemy-fly", 1, true, MOVEMENT_TYPE.FLY);
         } else {
-          currentEnemy = createEnemy(0.75);
+          currentEnemy = createEnemy("enemy-default", 0.8);
         }
 
         switch (i) {
@@ -143,7 +144,7 @@ let gameLoop = function(delta: any) {
         entity.velY = 0;
       }
 
-      // now move them
+      // actually apply the movement
       entity.spriteObject.x = tempX;
       entity.spriteObject.y = tempY;
 
@@ -177,40 +178,25 @@ app.loader
     // TODO: make this a popup notification of some kind
     statusDiv.innerHTML = "Click the enemies!";
 
-    // run this for each asset we have loaded
-    assets.forEach(function(asset) {
-      // enemies are created later
-      if (asset.name == "player") {
-        // create the sprite object
-        let currentSprite = new PIXI.Sprite(
-          app.loader.resources[asset.name].texture
-        );
+    // set up player object
+    player = new Player("player", app);
+    entities.push(player);
 
-        // keep this consistent
-        currentSprite.name = asset.name;
+    // put sprite in the center of the stage
+    player.spriteObject.x =
+      app.renderer.width / 2 - player.spriteObject.width / 2;
+    player.spriteObject.y =
+      app.renderer.height / 2 - player.spriteObject.height / 2;
+    // add sprite to stage
+    app.stage.addChild(player.spriteObject);
 
-        // make sure we can click it
-        currentSprite.interactive = true;
+    // scale view
+    app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
+    app.stage.scale.set(zoomScale, zoomScale);
 
-        // set up player object with this sprite
-        player = new Player(currentSprite, app);
-        entities.push(player);
-
-        // put sprite in the center of the stage
-        currentSprite.x = app.renderer.width / 2 - currentSprite.width / 2;
-        currentSprite.y = app.renderer.height / 2 - currentSprite.height / 2;
-        // add sprite to stage
-        app.stage.addChild(currentSprite);
-      }
-
-      // scale view
-      app.renderer.resize(gameWidth * zoomScale, gameHeight * zoomScale);
-      app.stage.scale.set(zoomScale, zoomScale);
-
-      // begin game loop
-      gameState = initLevel;
-      app.ticker.add(delta => tick(delta));
-    });
+    // begin game loop
+    gameState = initLevel;
+    app.ticker.add(delta => tick(delta));
   });
 
 // keeps all of our shit running
@@ -278,29 +264,16 @@ export let checkSpriteCollision = function(
 };
 
 let createEnemy = function(
+  spriteName: string,
   speed?: number,
   displayHealthBar?: boolean,
   movementType?: MOVEMENT_TYPE
 ): Enemy {
-  let currentSprite = new PIXI.Sprite(app.loader.resources["enemy"].texture);
-
-  // keep this consistent
-  currentSprite.name = "enemy";
-
-  // make sure we can click it
-  currentSprite.interactive = true;
-
-  let enemy = new Enemy(
-    currentSprite,
-    app,
-    speed,
-    displayHealthBar,
-    movementType
-  );
+  let enemy = new Enemy(spriteName, app, speed, displayHealthBar, movementType);
 
   // add sprite to stage
   entities.push(enemy);
-  app.stage.addChild(currentSprite);
+  app.stage.addChild(enemy.spriteObject);
 
   return enemy;
 };
