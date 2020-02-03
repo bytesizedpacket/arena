@@ -23,9 +23,6 @@ let gameState: Function;
 export let player: Player;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-// aliases and helpful variables
-let statusDiv = document.getElementById("status");
-
 // these are our assets
 let assets = [
   { name: "player", url: "assets/sprites/player.png" },
@@ -73,10 +70,6 @@ let gameLoop = function(delta: any) {
       if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
     }
 
-    if (Keyboard.isKeyDown("KeyB")) {
-      player.health -= 1;
-    }
-
     // actually move the sprite
     playerSprite.x += player.velX * delta;
     playerSprite.y += player.velY * delta;
@@ -100,8 +93,9 @@ app.loader
     // make stage interactable
     app.stage.interactive = true;
 
-    // clear our status thingy
-    statusDiv.innerHTML = "Press B to deplete health";
+    // tell the user to click the enemies!
+    // TODO: make this a popup notification of some kind
+    statusDiv.innerHTML = "Click the enemies!";
 
     // run this for each asset we have loaded
     assets.forEach(function(asset) {
