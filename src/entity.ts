@@ -99,6 +99,7 @@ export class Entity {
 
   // it has been clicked!
   public onClick(e?: any) {
-    console.log(this);
+    // generic entity click behavior
+    // 404 not found
   }
 }

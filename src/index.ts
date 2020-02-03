@@ -122,7 +122,7 @@ app.loader
           break;
         case "enemy":
           // TODO: spawn multiple enemies and place them accordingly
-          let enemy = new Enemy(currentSprite, app);
+          let enemy = new Enemy(currentSprite, app, 0.7); // make them slightly slower than the player
           entities.push(enemy);
 
           break;

@@ -19,8 +19,9 @@ export class Enemy extends Entity {
   // this will run every frame
   public tick() {
     super.tick();
+    // oh no it fucking died :c
     if (this.health <= 0) {
-      player.setScore(player.score + 1);
+      player.setScore(player.score + 1); // yay
 
       // we need to destroy this now :c
       app.stage.removeChild(this.spriteObject);
@@ -28,6 +29,32 @@ export class Enemy extends Entity {
       entities.splice(entities.indexOf(this), 1);
       this.healthBar.destroy();
       this.spriteObject.destroy();
+    } else {
+      // if you have reached this point, the thing isn't dead
+
+      // direction towards player
+      let toPlayerX = player.spriteObject.x - this.spriteObject.x;
+      let toPlayerY = player.spriteObject.y - this.spriteObject.y;
+
+      // normalize
+      let toPlayerLength = Math.sqrt(
+        toPlayerX * toPlayerX + toPlayerY * toPlayerY
+      );
+      toPlayerX = toPlayerX / toPlayerLength;
+      toPlayerY = toPlayerY / toPlayerLength;
+
+      /*
+    // this made the cookie move too fast
+    // it actually ORBITED the player
+    // tfw you accidentally invent gravity
+    // TODO: make this an actual game mechanic somehow
+    // because it's cool
+    this.velX += toPlayerX * this.speed;
+    this.velY += toPlayerY * this.speed;
+    */
+
+      this.velX = toPlayerX * this.speed;
+      this.velY = toPlayerY * this.speed;
     }
   }
 
