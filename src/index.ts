@@ -43,7 +43,6 @@ app.view.addEventListener("contextmenu", e => {
 
 // initialize a new level
 let initLevel = function(delta?: any) {
-  // TODO: implement enemy generation based on current level
   if (!currentLevel) currentLevel = 1; // default to 1 if not set
   levelDiv.innerHTML = "<b>LEVEL " + currentLevel + "</b>";
   switch (currentLevel) {

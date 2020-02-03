@@ -1,6 +1,6 @@
 import { Sprite } from "pixi.js";
 import { Application } from "pixi.js";
-import { Entity } from "./entity";
+import { Entity, State } from "./entity";
 import { player } from "./index";
 import { app } from "./index";
 import { entities } from "./index";
@@ -23,12 +23,7 @@ export class Enemy extends Entity {
     if (this.health <= 0) {
       player.setScore(player.score + 1); // yay
 
-      // we need to destroy this now :c
-      app.stage.removeChild(this.spriteObject);
-      app.stage.removeChild(this.healthBar);
-      entities.splice(entities.indexOf(this), 1);
-      this.healthBar.destroy();
-      this.spriteObject.destroy();
+      this.destroy(); // :c
     } else {
       // if you have reached this point, the thing isn't dead
 
@@ -61,6 +56,6 @@ export class Enemy extends Entity {
   // we have been clicked!
   public onClick(e?: Event) {
     super.onClick(e);
-    this.health -= 25;
+    if (player.state == State.ACTIVE) this.health -= 25;
   }
 }

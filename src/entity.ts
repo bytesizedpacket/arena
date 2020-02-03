@@ -2,6 +2,8 @@ import { Sprite } from "pixi.js";
 import { Graphics } from "pixi.js";
 import { Container } from "pixi.js";
 import { Application } from "pixi.js";
+import { entities } from "./index";
+import { app } from "./index";
 
 export enum State {
   ACTIVE,
@@ -103,5 +105,14 @@ export class Entity {
   public onClick(e?: any) {
     // generic entity click behavior
     // 404 not found
+  }
+
+  // destroy this entity from the game :c
+  public destroy() {
+    app.stage.removeChild(this.spriteObject);
+    app.stage.removeChild(this.healthBar);
+    entities.splice(entities.indexOf(this), 1);
+    this.healthBar.destroy();
+    this.spriteObject.destroy();
   }
 }
