@@ -5,7 +5,7 @@ import * as Keyboard from "pixi.js-keyboard";
 // @ts-ignore
 import * as Mouse from "pixi.js-mouse";
 import { Entity } from "./entity";
-import { State } from "./entity";
+import { STATE, MOVEMENT_TYPE } from "./entity";
 import { Player } from "./player";
 import { Enemy } from "./enemy";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
@@ -52,7 +52,14 @@ let initLevel = function(delta?: any) {
     default:
       // create 3 enemies
       for (let i = 0; i < 3; i++) {
-        let currentEnemy = createEnemy(0.75);
+        let currentEnemy: Enemy;
+
+        // the middle enemy will have fly movement
+        if (i == 1) {
+          currentEnemy = createEnemy(1, true, MOVEMENT_TYPE.FLY);
+        } else {
+          currentEnemy = createEnemy(0.75);
+        }
 
         switch (i) {
           case 0:
@@ -80,7 +87,7 @@ let initLevel = function(delta?: any) {
 // main gameplay loop
 let gameLoop = function(delta: any) {
   // only if the player is alive...
-  if (player.state == State.ACTIVE) {
+  if (player.state == STATE.ACTIVE) {
     // handle input!
     if (Keyboard.isKeyDown("KeyS", "ArrowDown")) {
       player.velY = player.speed;
@@ -112,7 +119,7 @@ let gameLoop = function(delta: any) {
   // make sure every entity handles their ticks
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
-    if (entity.state != State.INACTIVE) {
+    if (entity.state != STATE.INACTIVE) {
       // we need to check if theit potential movement is outside the map boundary
       let tempX = entity.spriteObject.x + entity.velX * delta;
       let tempY = entity.spriteObject.y + entity.velY * delta;
@@ -270,7 +277,11 @@ export let checkSpriteCollision = function(
   return hit;
 };
 
-let createEnemy = function(speed?: number, displayHealthBar?: boolean): Enemy {
+let createEnemy = function(
+  speed?: number,
+  displayHealthBar?: boolean,
+  movementType?: MOVEMENT_TYPE
+): Enemy {
   let currentSprite = new PIXI.Sprite(app.loader.resources["enemy"].texture);
 
   // keep this consistent
@@ -279,7 +290,13 @@ let createEnemy = function(speed?: number, displayHealthBar?: boolean): Enemy {
   // make sure we can click it
   currentSprite.interactive = true;
 
-  let enemy = new Enemy(currentSprite, app, speed, displayHealthBar);
+  let enemy = new Enemy(
+    currentSprite,
+    app,
+    speed,
+    displayHealthBar,
+    movementType
+  );
 
   // add sprite to stage
   entities.push(enemy);

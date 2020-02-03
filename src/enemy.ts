@@ -1,6 +1,6 @@
 import { Sprite } from "pixi.js";
 import { Application } from "pixi.js";
-import { Entity, State } from "./entity";
+import { Entity, STATE, MOVEMENT_TYPE } from "./entity";
 import { player } from "./index";
 import { app } from "./index";
 import { entities } from "./index";
@@ -11,9 +11,10 @@ export class Enemy extends Entity {
     spriteObject: Sprite,
     app: Application,
     speed?: number,
-    displayHealthBar?: boolean
+    displayHealthBar?: boolean,
+    movementType?: MOVEMENT_TYPE
   ) {
-    super(spriteObject, app, speed, displayHealthBar);
+    super(spriteObject, app, speed, displayHealthBar, movementType);
   }
 
   // this will run every frame
@@ -38,14 +39,23 @@ export class Enemy extends Entity {
       toPlayerX = toPlayerX / toPlayerLength;
       toPlayerY = toPlayerY / toPlayerLength;
 
-      this.velX += (toPlayerX * this.speed) / 50;
-      this.velY += (toPlayerY * this.speed) / 50;
+      // different movement based on enemy type
+      switch (this.movementType) {
+        case MOVEMENT_TYPE.DEFAULT:
+          this.velX = toPlayerX * this.speed;
+          this.velY = toPlayerY * this.speed;
+          break;
+        case MOVEMENT_TYPE.FLY:
+          this.velX += (toPlayerX * this.speed) / 50;
+          this.velY += (toPlayerY * this.speed) / 50;
+          break;
+      }
     }
   }
 
   // we have been clicked!
   public onClick(e?: Event) {
     super.onClick(e);
-    if (player.state == State.ACTIVE) this.health -= 25;
+    if (player.state == STATE.ACTIVE) this.health -= 25;
   }
 }

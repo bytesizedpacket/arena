@@ -5,20 +5,26 @@ import { Application } from "pixi.js";
 import { entities } from "./index";
 import { app } from "./index";
 
-export enum State {
+export enum STATE {
   ACTIVE,
   INACTIVE, // won't move or do anything
   DEAD // will remove itself from the game/memory
+}
+
+export enum MOVEMENT_TYPE {
+  DEFAULT, // regular movement
+  FLY // "orbit" movement
 }
 
 // generic entity class
 export class Entity {
   public spriteObject: Sprite;
   public healthBar: Container;
+  public movementType: MOVEMENT_TYPE;
   public outlineHealthBar: Graphics;
   public rearHealthBar: Graphics;
   public frontHealthBar: Graphics;
-  public state: State;
+  public state: STATE;
   public health: number = 100;
   public speed: number; // default 1 if not specified
   public velX: number = 0; // velocity X
@@ -28,7 +34,8 @@ export class Entity {
     spriteObject: Sprite,
     app: Application,
     speed?: number,
-    displayHealthBar?: boolean
+    displayHealthBar?: boolean,
+    movementType?: MOVEMENT_TYPE
   ) {
     this.spriteObject = spriteObject;
 
@@ -69,8 +76,14 @@ export class Entity {
       app.stage.addChild(this.healthBar);
     }
 
+    if (movementType) {
+      this.movementType = movementType;
+    } else {
+      this.movementType = MOVEMENT_TYPE.DEFAULT;
+    }
+
     // initiate as alive
-    this.state = State.ACTIVE;
+    this.state = STATE.ACTIVE;
 
     // make it clickable (calls this.onClick)
     // this is jank
@@ -105,7 +118,7 @@ export class Entity {
     // uh oh spaghettios it's dead
     if (this.health <= 0) {
       this.health = 0; // prevents the healthbar from descending into deader-than-dead
-      this.state = State.DEAD;
+      this.state = STATE.DEAD;
     }
   }
 
