@@ -38,18 +38,8 @@ export class Enemy extends Entity {
       toPlayerX = toPlayerX / toPlayerLength;
       toPlayerY = toPlayerY / toPlayerLength;
 
-      /*
-    // this made the cookie move too fast
-    // it actually ORBITED the player
-    // tfw you accidentally invent gravity
-    // TODO: make this an actual game mechanic somehow
-    // because it's cool
-    this.velX += toPlayerX * this.speed;
-    this.velY += toPlayerY * this.speed;
-    */
-
-      this.velX = toPlayerX * this.speed;
-      this.velY = toPlayerY * this.speed;
+      this.velX += (toPlayerX * this.speed) / 50;
+      this.velY += (toPlayerY * this.speed) / 50;
     }
   }
 
