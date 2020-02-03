@@ -13,4 +13,4 @@ Made with PIXI.JS, Typescript, and Webpack.
 
 A live build is running at [floof.monster](https://floof.monster/). This automatically updates itself from the most recent commit on the master branch of this repository.
 
-This project currently uses icons from [Pixeltier's Modern RPG Icon Pack](https://pixeltier.itch.io/pixeltiers-modern-rpg-icon-set), as well as [Justin's 16x16 Icon Pack](https://zeromatrix.itch.io/rpgiab-icons), which is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).
+This project currently uses icons from [Pixeltier's Modern RPG Icon Pack](https://pixeltier.itch.io/pixeltiers-modern-rpg-icon-set) and [Pixel_Poem Dungeon Tileset](https://pixel-poem.itch.io/dungeon-assetpuck), as well as [Justin's 16x16 Icon Pack](https://zeromatrix.itch.io/rpgiab-icons), which is licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/).

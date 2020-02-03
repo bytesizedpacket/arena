@@ -34,7 +34,6 @@ export class Player extends Entity {
 
       // check for collision
       entities.forEach(function(entity: Entity) {
-        // make sure we're not checking ourselves (which would wreck ourselves)
         // also are we colliding with it?
         if (checkSpriteCollision(tthis.spriteObject, entity.spriteObject)) {
           switch (entity.constructor) {
