@@ -279,7 +279,7 @@ let createEnemy = function(speed?: number, displayHealthBar?: boolean): Enemy {
   // make sure we can click it
   currentSprite.interactive = true;
 
-  let enemy = new Enemy(currentSprite, app, speed, displayHealthBar); // make them slightly slower than the player
+  let enemy = new Enemy(currentSprite, app, speed, displayHealthBar);
 
   // add sprite to stage
   entities.push(enemy);
