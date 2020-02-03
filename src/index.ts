@@ -19,7 +19,7 @@ let levelDiv = document.getElementById("level");
 let viewWidth: number = 256;
 let viewHeight: number = 256;
 let zoomScale: number = parseInt(urlParams.get("zoom")); // URL query parameter ?zoom=_
-export let currentLevel: number = 1;
+export let currentLevel: number;
 if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
 // TODO: if zoom level isn't specified, automatically determine largest possible zoom level (also put this in window.onresize)
 let gameState: Function;
@@ -47,7 +47,15 @@ app.view.addEventListener("contextmenu", e => {
 
 // initialize a new level
 let initLevel = function(delta?: any) {
-  if (!currentLevel) currentLevel = 1; // default to 1 if not set
+  if (!currentLevel) {
+    // level hasn't been set - let's check the url variable
+    let levelSelect: number = parseInt(urlParams.get("level"));
+    if (!isNaN(levelSelect)) {
+      currentLevel = levelSelect;
+    } else {
+      currentLevel = 1; // default to 1 if not set
+    }
+  }
   levelDiv.innerHTML = "<b>LEVEL " + currentLevel + "</b>";
   switch (currentLevel) {
     case 1:
