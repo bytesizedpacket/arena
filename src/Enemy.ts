@@ -91,8 +91,8 @@ export class Enemy extends Entity {
           this.velY = toPlayerY * this.speed;
           break;
         case MOVEMENT_TYPE.FLY:
-          this.velX += (toPlayerX * this.speed) / 15;
-          this.velY += (toPlayerY * this.speed) / 15;
+          this.velX += (toPlayerX * this.speed) / 13;
+          this.velY += (toPlayerY * this.speed) / 13;
           break;
       }
 
