@@ -15,6 +15,7 @@ export enum State {
 export class Entity {
   public spriteObject: Sprite;
   public healthBar: Container;
+  public outlineHealthBar: Graphics;
   public rearHealthBar: Graphics;
   public frontHealthBar: Graphics;
   public state: State;
@@ -44,17 +45,24 @@ export class Entity {
     if (displayHealthBar == undefined || displayHealthBar) {
       this.healthBar = new Container();
 
+      // create the outline rectangle
+      this.outlineHealthBar = new Graphics();
+      this.outlineHealthBar.beginFill(0x000000);
+      this.outlineHealthBar.drawRect(0, 0, this.spriteObject.width + 2, 4);
+      this.outlineHealthBar.endFill();
+      this.healthBar.addChild(this.outlineHealthBar);
+
       // create the back red rectangle
       this.rearHealthBar = new Graphics();
       this.rearHealthBar.beginFill(0xff3300);
-      this.rearHealthBar.drawRect(0, 0, this.spriteObject.width, 2); // same width as the sprite
+      this.rearHealthBar.drawRect(1, 1, this.spriteObject.width, 2); // same width as the sprite
       this.rearHealthBar.endFill();
       this.healthBar.addChild(this.rearHealthBar);
 
       //Create the front green rectangle
       this.frontHealthBar = new Graphics();
       this.frontHealthBar.beginFill(0x00ff00);
-      this.frontHealthBar.drawRect(0, 0, this.spriteObject.width, 2);
+      this.frontHealthBar.drawRect(1, 1, this.spriteObject.width, 2);
       this.frontHealthBar.endFill();
       this.healthBar.addChild(this.frontHealthBar);
 
@@ -79,7 +87,7 @@ export class Entity {
     if (this.healthBar != undefined) {
       // put 2px it under the entity
       this.healthBar.position.set(
-        this.spriteObject.x,
+        this.spriteObject.x - 1,
         this.spriteObject.y + this.spriteObject.height + 2
       );
 
