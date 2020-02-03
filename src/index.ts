@@ -23,6 +23,7 @@ export let currentLevel: number = 1;
 if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
 let gameState: Function;
 export let player: Player;
+export let currentDelta = 0;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 // these are our assets
@@ -201,6 +202,7 @@ app.loader
 
 // keeps all of our shit running
 let tick = function(delta: any) {
+  currentDelta = delta;
   gameState(delta);
   Keyboard.update();
   Mouse.update();

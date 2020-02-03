@@ -2,8 +2,7 @@ import { Sprite } from "pixi.js";
 import { Application } from "pixi.js";
 import { Entity, STATE, MOVEMENT_TYPE } from "./entity";
 import { player } from "./index";
-import { app } from "./index";
-import { entities } from "./index";
+import { entities, checkSpriteCollision, currentDelta } from "./index";
 
 // main enemy object
 export class Enemy extends Entity {
@@ -51,7 +50,36 @@ export class Enemy extends Entity {
           break;
       }
 
+      // remember these for a sec
+      let prevX = this.spriteObject.x;
+      let prevY = this.spriteObject.y;
+
+      // actually move the sprite so we can check for collision
+      this.spriteObject.x += this.velX * currentDelta;
+      this.spriteObject.y += this.velY * currentDelta;
+
+      // are we now intersecting with something?
+      let tthis = this; // gotta work around this jank lol
+      entities.forEach(function(entityB: Entity) {
+        if (entityB instanceof Enemy && entityB != tthis) {
+          if (checkSpriteCollision(entityB.spriteObject, tthis.spriteObject)) {
+            let toEnemyX = entityB.spriteObject.x - tthis.spriteObject.x;
+            let toEnemyY = entityB.spriteObject.y - tthis.spriteObject.y;
+            let toEnemyLength = Math.sqrt(
+              toEnemyX * toEnemyX + toEnemyY * toEnemyY
+            );
+            toEnemyX = toEnemyX / toEnemyLength;
+            toEnemyY = toEnemyY / toEnemyLength;
+
+            // move AWAY from the enemy for a frame
+            tthis.velX = toEnemyX * -1 * tthis.speed;
+            tthis.velY = toEnemyY * -1 * tthis.speed;
+          }
+        }
+      });
+
       // we don't *actually* move the entity here, we leave this to the main game loop
+      this.spriteObject.position.set(prevX, prevY);
     }
   }
 
