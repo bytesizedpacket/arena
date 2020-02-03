@@ -2,7 +2,13 @@ import { Sprite } from "pixi.js";
 import { Application } from "pixi.js";
 import { Entity, STATE, MOVEMENT_TYPE } from "./Entity";
 import { player } from "./index";
-import { entities, checkSpriteCollision, currentDelta } from "./index";
+import {
+  entities,
+  checkSpriteCollision,
+  currentDelta,
+  viewHeight,
+  viewWidth
+} from "./index";
 
 // main enemy object
 export class Enemy extends Entity {
@@ -26,7 +32,6 @@ export class Enemy extends Entity {
       this.destroy(); // :c
     } else {
       // if you have reached this point, the thing isn't dead
-
       // direction towards player
       let toPlayerX = player.spriteObject.x - this.spriteObject.x;
       let toPlayerY = player.spriteObject.y - this.spriteObject.y;
@@ -38,26 +43,13 @@ export class Enemy extends Entity {
       toPlayerX = toPlayerX / toPlayerLength;
       toPlayerY = toPlayerY / toPlayerLength;
 
-      // different movement based on enemy type
-      switch (this.movementType) {
-        case MOVEMENT_TYPE.DEFAULT:
-          this.velX = toPlayerX * this.speed;
-          this.velY = toPlayerY * this.speed;
-          break;
-        case MOVEMENT_TYPE.FLY:
-          this.velX += (toPlayerX * this.speed) / 15;
-          this.velY += (toPlayerY * this.speed) / 15;
-          break;
-      }
-
       // remember these for a sec
       let prevX = this.spriteObject.x;
       let prevY = this.spriteObject.y;
 
-      // actually move the sprite so we can check for collision
-      this.spriteObject.x += this.velX * currentDelta;
-      this.spriteObject.y += this.velY * currentDelta;
+      // TODO: change all entity.spriteObject.x/y to a property of the entity itself so we can have the camera render separately
 
+      // prevent enemies from colliding with each other
       // don't do this if we can fly
       if (this.movementType != MOVEMENT_TYPE.FLY) {
         // are we now intersecting with something?
@@ -87,8 +79,24 @@ export class Enemy extends Entity {
         });
       }
 
+      // actually move the sprite
+      this.spriteObject.x += this.velX * currentDelta;
+      this.spriteObject.y += this.velY * currentDelta;
+
+      // prepare velocity for next frame
+      // different movement based on enemy type
+      switch (this.movementType) {
+        case MOVEMENT_TYPE.DEFAULT:
+          this.velX = toPlayerX * this.speed;
+          this.velY = toPlayerY * this.speed;
+          break;
+        case MOVEMENT_TYPE.FLY:
+          this.velX += (toPlayerX * this.speed) / 15;
+          this.velY += (toPlayerY * this.speed) / 15;
+          break;
+      }
+
       // we don't *actually* move the entity here, we leave this to the main game loop
-      this.spriteObject.position.set(prevX, prevY);
     }
   }
 

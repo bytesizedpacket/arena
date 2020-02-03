@@ -17,8 +17,8 @@ let statusDiv = document.getElementById("status");
 let levelDiv = document.getElementById("level");
 
 // game properties
-let viewWidth: number = 256;
-let viewHeight: number = 256;
+export let viewWidth: number = 256;
+export let viewHeight: number = 256;
 let zoomScale: number = parseInt(urlParams.get("zoom")); // URL query parameter ?zoom=_
 export let currentLevel: number;
 if (isNaN(zoomScale)) zoomScale = 2; // default to 2 if not specified
@@ -141,40 +141,35 @@ let gameLoop = function(delta: any) {
 
   let enemyCheck = false; // do we have any enemies?
 
-  // make sure every entity handles their ticks
+  // make sure every entity handles their ticks and stays inside the map
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
     if (entity.state != STATE.INACTIVE) {
-      // we need to check if theit potential movement is outside the map boundary
-      // TODO: change all entity.spriteObject.x/y to a property of the entity itself so we can have the camera render separately
-      let tempX = entity.spriteObject.x + entity.velX * delta;
-      let tempY = entity.spriteObject.y + entity.velY * delta;
+      // hold onto these since we're gonna keep things on the map
+      let prevX = entity.spriteObject.x;
+      let prevY = entity.spriteObject.y;
 
-      // constrain it to the map if so
+      entity.tick(); // tock
+
+      // constrain it to the map
       // also set velocity to 0 so they turn around quicker
-      if (tempX < 0) {
-        tempX = 0;
+      if (entity.spriteObject.x < 0) {
+        entity.spriteObject.x = prevX;
         entity.velX = 0;
       }
-      if (tempY < 0) {
-        tempY = 0;
+      if (entity.spriteObject.y < 0) {
+        entity.spriteObject.y = prevY;
         entity.velY = 0;
       }
       // TODO: constrain these to map instead of screen size
-      if (tempX > viewWidth - entity.spriteObject.width) {
-        tempX = viewWidth - entity.spriteObject.width;
+      if (entity.spriteObject.x > viewWidth - entity.spriteObject.width) {
+        entity.spriteObject.x = prevX;
         entity.velX = 0;
       }
-      if (tempY > viewHeight - entity.spriteObject.height) {
-        tempY = viewHeight - entity.spriteObject.height;
+      if (entity.spriteObject.y > viewHeight - entity.spriteObject.height) {
+        entity.spriteObject.y = prevY;
         entity.velY = 0;
       }
-
-      // actually apply the movement
-      entity.spriteObject.x = tempX;
-      entity.spriteObject.y = tempY;
-
-      entity.tick(); // tock
 
       // is this an enemy?
       if (entity instanceof Enemy) enemyCheck = true;

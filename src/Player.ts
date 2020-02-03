@@ -1,7 +1,6 @@
 import { HealthPack } from "./HealthPack";
-import { Sprite } from "pixi.js";
 import { Application } from "pixi.js";
-import { entities } from "./index";
+import { entities, currentDelta, viewHeight, viewWidth } from "./index";
 import { checkSpriteCollision } from "./index";
 import { Entity } from "./Entity";
 import { Enemy } from "./Enemy";
@@ -31,6 +30,9 @@ export class Player extends Entity {
       statusDiv.innerHTML = "Uh-oh spaghetti-o's! You're <b>dead.</b>";
     } else {
       // we're still alive!
+
+      this.spriteObject.x += this.velX * currentDelta;
+      this.spriteObject.y += this.velY * currentDelta;
 
       // check for collision
       entities.forEach(function(entity: Entity) {
