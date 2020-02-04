@@ -58,6 +58,9 @@ let initLevel = function(delta?: any) {
     }
   }
   levelDiv.innerHTML = "<b>LEVEL " + currentLevel + "</b>";
+
+  // actually generate the level now
+
   switch (currentLevel) {
     case 1:
     // yay it's level 1
@@ -85,13 +88,11 @@ let initLevel = function(delta?: any) {
             break;
           case 1:
             // put it halfway down the screen
-            //currentEnemy.spriteObject.y =
             currentEnemy.position.y =
               viewHeight / 2 - currentEnemy.spriteObject.height / 2;
             break;
           case 2:
             // put it at the bottom
-            //currentEnemy.spriteObject.y =
             currentEnemy.position.y =
               viewHeight - currentEnemy.spriteObject.height;
             break;
@@ -242,7 +243,6 @@ let tick = function(delta: any) {
 };
 
 // check for collision between two sprites
-// TODO: adjust for entity position property collision instead of PIXI.Sprite
 export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
   //Define the variables we'll need to calculate
   let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;

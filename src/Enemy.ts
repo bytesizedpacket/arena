@@ -40,10 +40,9 @@ export class Enemy extends Entity {
       let toPlayerLength = Math.sqrt(
         toPlayerX * toPlayerX + toPlayerY * toPlayerY
       );
+
       toPlayerX = toPlayerX / toPlayerLength;
       toPlayerY = toPlayerY / toPlayerLength;
-
-      // TODO: change all entity.spriteObject.x/y to a property of the entity itself so we can have the camera render separately
 
       // prevent enemies from colliding with each other
       // don't do this if we can fly
@@ -101,6 +100,7 @@ export class Enemy extends Entity {
   // we have been clicked!
   public onClick(e?: Event) {
     super.onClick(e);
+    // TODO: check distance from player, constrain within a set distance
     if (player.state == STATE.ACTIVE) this.health -= 25;
   }
 }
