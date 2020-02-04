@@ -55,6 +55,14 @@ export class Player extends Entity {
     this.updateSprite();
   }
 
+  // override the entity one to always put us in the center
+  public updateSprite() {
+    this.spriteObject.position.set(
+      viewWidth / 2 - this.spriteObject.width / 2,
+      viewHeight / 2 - this.spriteObject.height / 2
+    );
+  }
+
   // sets the player's current score
   public setScore(score: number) {
     this.score = score;

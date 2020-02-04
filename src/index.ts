@@ -63,6 +63,11 @@ let initLevel = function(delta?: any) {
     // yay it's level 1
     // fall throguh to default for now so it keeps going forever
     default:
+      // put player in the center
+      // TODO: use map size instead of screen size
+      player.position.x = viewWidth / 2 - player.spriteObject.width / 2;
+      player.position.y = viewHeight / 2 - player.spriteObject.height / 2;
+
       // create 3 enemies
       for (let i = 0; i < 3; i++) {
         let currentEnemy: Enemy;
@@ -146,6 +151,9 @@ let gameLoop = function(delta: any) {
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
     if (entity.state != STATE.INACTIVE) {
+      // TEMPORARILY DISABLED
+      /*
+
       // constrain it to the map
       // also set velocity to 0 so they turn around quicker
       if (entity.position.x < 0) {
@@ -165,6 +173,8 @@ let gameLoop = function(delta: any) {
         entity.position.y = viewHeight - entity.spriteObject.height;
         entity.velY = 0;
       }
+
+      */
 
       entity.tick(); // tock
 
@@ -199,10 +209,6 @@ app.loader
     // set up player object
     player = new Player("player", app);
 
-    // put sprite in the center of the stage
-    player.position.x = app.renderer.width / 2 - player.spriteObject.width / 2;
-    player.position.y =
-      app.renderer.height / 2 - player.spriteObject.height / 2;
     // add sprite to stage
     app.stage.addChild(player.spriteObject);
 

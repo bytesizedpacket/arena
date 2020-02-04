@@ -3,7 +3,7 @@ import { Graphics } from "pixi.js";
 import { Container } from "pixi.js";
 import { Application } from "pixi.js";
 import { entities } from "./index";
-import { app } from "./index";
+import { app, player, viewWidth, viewHeight } from "./index";
 
 export enum STATE {
   ACTIVE,
@@ -143,9 +143,16 @@ export class Entity {
 
   // force update the sprite if we need instant responsiveness
   public updateSprite() {
-    // set the sprite to our actual position
-    // TODO: adjust this relative to the camera
-    this.spriteObject.position.set(this.position.x, this.position.y);
+    // set the sprite to our position relative to the player
+
+    let offsetX = viewWidth / 2 - player.spriteObject.width / 2;
+    let offsetY = viewHeight / 2 - player.spriteObject.height / 2;
+
+    // direction towards player
+    let toPlayerX = player.position.x - this.position.x;
+    let toPlayerY = player.position.y - this.position.y;
+
+    this.spriteObject.position.set(offsetX - toPlayerX, offsetY - toPlayerY);
   }
 
   // runs every frame
