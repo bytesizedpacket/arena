@@ -36,6 +36,7 @@ export class Entity {
   public velX: number = 0; // velocity X
   public velY: number = 0; // velocity Y
   public position: Position;
+  public tilePosition: Position; // this represents our tile location on the map
 
   constructor(
     spriteName: string,
@@ -160,6 +161,12 @@ export class Entity {
   public tick() {
     this.updateHealthBar();
 
+    // update our tile position
+    this.tilePosition = {
+      x: Math.round(this.position.x / 16),
+      y: Math.round(this.position.y / 16)
+    };
+
     // uh oh spaghettios it's dead
     if (this.health <= 0) {
       this.health = 0; // prevents the healthbar from descending into deader-than-dead
@@ -183,7 +190,6 @@ export class Entity {
       toEntityX * toEntityX + toEntityY * toEntityY
     );
 
-    console.log(toEnemyLength);
     return toEnemyLength;
   }
 
