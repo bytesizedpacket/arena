@@ -31,13 +31,13 @@ export class Player extends Entity {
     } else {
       // we're still alive!
 
-      this.spriteObject.x += this.velX * currentDelta;
-      this.spriteObject.y += this.velY * currentDelta;
+      this.position.x += this.velX * currentDelta;
+      this.position.y += this.velY * currentDelta;
 
       // check for collision
       entities.forEach(function(entity: Entity) {
         // also are we colliding with it?
-        if (checkSpriteCollision(tthis.spriteObject, entity.spriteObject)) {
+        if (checkSpriteCollision(tthis, entity)) {
           switch (entity.constructor) {
             case Enemy:
               tthis.health -= 1;
@@ -50,6 +50,9 @@ export class Player extends Entity {
         }
       });
     }
+
+    // since we handle movement here
+    this.updateSprite();
   }
 
   // sets the player's current score

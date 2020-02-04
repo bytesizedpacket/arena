@@ -80,12 +80,14 @@ let initLevel = function(delta?: any) {
             break;
           case 1:
             // put it halfway down the screen
-            currentEnemy.spriteObject.y =
+            //currentEnemy.spriteObject.y =
+            currentEnemy.position.y =
               viewHeight / 2 - currentEnemy.spriteObject.height / 2;
             break;
           case 2:
             // put it at the bottom
-            currentEnemy.spriteObject.y =
+            //currentEnemy.spriteObject.y =
+            currentEnemy.position.y =
               viewHeight - currentEnemy.spriteObject.height;
             break;
         }
@@ -99,8 +101,7 @@ let initLevel = function(delta?: any) {
           x: getRandomInt(0, viewWidth - healthPack.spriteObject.width - 1),
           y: getRandomInt(0, viewHeight - healthPack.spriteObject.height - 1)
         };
-        healthPack.spriteObject.position.set(pos.x, pos.y);
-        // TODO: make it use world position instead of screen position
+        healthPack.position = pos;
       }
       break;
   }
@@ -147,21 +148,21 @@ let gameLoop = function(delta: any) {
     if (entity.state != STATE.INACTIVE) {
       // constrain it to the map
       // also set velocity to 0 so they turn around quicker
-      if (entity.spriteObject.x < 0) {
-        entity.spriteObject.x = 0;
+      if (entity.position.x < 0) {
+        entity.position.x = 0;
         entity.velX = 0;
       }
-      if (entity.spriteObject.y < 0) {
-        entity.spriteObject.y = 0;
+      if (entity.position.y < 0) {
+        entity.position.y = 0;
         entity.velY = 0;
       }
       // TODO: constrain these to map instead of screen size
-      if (entity.spriteObject.x > viewWidth - entity.spriteObject.width) {
-        entity.spriteObject.x = viewWidth - entity.spriteObject.width;
+      if (entity.position.x > viewWidth - entity.spriteObject.width) {
+        entity.position.x = viewWidth - entity.spriteObject.width;
         entity.velX = 0;
       }
-      if (entity.spriteObject.y > viewHeight - entity.spriteObject.height) {
-        entity.spriteObject.y = viewHeight - entity.spriteObject.height;
+      if (entity.position.y > viewHeight - entity.spriteObject.height) {
+        entity.position.y = viewHeight - entity.spriteObject.height;
         entity.velY = 0;
       }
 
@@ -199,9 +200,8 @@ app.loader
     player = new Player("player", app);
 
     // put sprite in the center of the stage
-    player.spriteObject.x =
-      app.renderer.width / 2 - player.spriteObject.width / 2;
-    player.spriteObject.y =
+    player.position.x = app.renderer.width / 2 - player.spriteObject.width / 2;
+    player.position.y =
       app.renderer.height / 2 - player.spriteObject.height / 2;
     // add sprite to stage
     app.stage.addChild(player.spriteObject);
@@ -237,18 +237,17 @@ let tick = function(delta: any) {
 
 // check for collision between two sprites
 // TODO: adjust for entity position property collision instead of PIXI.Sprite
-export let checkSpriteCollision = function(
-  sprite1: PIXI.Sprite,
-  sprite2: PIXI.Sprite
-) {
+export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
   //Define the variables we'll need to calculate
   let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+  let sprite1 = entity1.spriteObject;
+  let sprite2 = entity2.spriteObject;
 
   // alsdjfkafds
   let r1 = {
     //Find the center points of each sprite
-    centerX: sprite1.x + sprite2.width / 2,
-    centerY: sprite1.y + sprite1.height / 2,
+    centerX: entity1.position.x + sprite2.width / 2,
+    centerY: entity1.position.y + sprite1.height / 2,
     //Find the half-widths and half-heights of each sprite
     halfWidth: sprite1.width / 2,
     halfHeight: sprite1.height / 2
@@ -256,8 +255,8 @@ export let checkSpriteCollision = function(
 
   let r2 = {
     //Find the center points of each sprite
-    centerX: sprite2.x + sprite2.width / 2,
-    centerY: sprite2.y + sprite2.height,
+    centerX: entity2.position.x + sprite2.width / 2,
+    centerY: entity2.position.y + sprite2.height,
     //Find the half-widths and half-heights of each sprite
     halfWidth: sprite2.width / 2,
     halfHeight: sprite2.height / 2

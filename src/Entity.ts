@@ -16,6 +16,12 @@ export enum MOVEMENT_TYPE {
   FLY // "orbit" movement
 }
 
+// we use this independently from the screen/sprite coordingates
+export interface Position {
+  x: number;
+  y: number;
+}
+
 // generic entity class
 export class Entity {
   public spriteObject: Sprite;
@@ -29,13 +35,15 @@ export class Entity {
   public speed: number;
   public velX: number = 0; // velocity X
   public velY: number = 0; // velocity Y
+  public position: Position;
 
   constructor(
     spriteName: string,
     app: Application,
     speed?: number,
     displayHealthBar?: boolean,
-    movementType?: MOVEMENT_TYPE
+    movementType?: MOVEMENT_TYPE,
+    position?: Position
   ) {
     // create our sprite with the given name
     let currentSprite = new Sprite(app.loader.resources[spriteName].texture);
@@ -94,6 +102,13 @@ export class Entity {
       this.movementType = MOVEMENT_TYPE.DEFAULT;
     }
 
+    // give us our position
+    if (position) {
+      this.position = position;
+    } else {
+      this.position = { x: 0, y: 0 };
+    }
+
     // initiate as alive
     this.state = STATE.ACTIVE;
 
@@ -126,6 +141,13 @@ export class Entity {
     }
   }
 
+  // force update the sprite if we need instant responsiveness
+  public updateSprite() {
+    // set the sprite to our actual position
+    // TODO: adjust this relative to the camera
+    this.spriteObject.position.set(this.position.x, this.position.y);
+  }
+
   // runs every frame
   // this DOES NOT GET CALLED if the state is INACTIVE
   public tick() {
@@ -136,6 +158,8 @@ export class Entity {
       this.health = 0; // prevents the healthbar from descending into deader-than-dead
       this.state = STATE.DEAD;
     }
+
+    this.updateSprite();
   }
 
   // it has been clicked!

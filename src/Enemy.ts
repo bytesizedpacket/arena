@@ -33,8 +33,8 @@ export class Enemy extends Entity {
     } else {
       // if you have reached this point, the thing isn't dead
       // direction towards player
-      let toPlayerX = player.spriteObject.x - this.spriteObject.x;
-      let toPlayerY = player.spriteObject.y - this.spriteObject.y;
+      let toPlayerX = player.position.x - this.position.x;
+      let toPlayerY = player.position.y - this.position.y;
 
       // normalize
       let toPlayerLength = Math.sqrt(
@@ -42,10 +42,6 @@ export class Enemy extends Entity {
       );
       toPlayerX = toPlayerX / toPlayerLength;
       toPlayerY = toPlayerY / toPlayerLength;
-
-      // remember these for a sec
-      let prevX = this.spriteObject.x;
-      let prevY = this.spriteObject.y;
 
       // TODO: change all entity.spriteObject.x/y to a property of the entity itself so we can have the camera render separately
 
@@ -60,11 +56,9 @@ export class Enemy extends Entity {
             entityB != tthis &&
             entityB.movementType != MOVEMENT_TYPE.FLY
           ) {
-            if (
-              checkSpriteCollision(entityB.spriteObject, tthis.spriteObject)
-            ) {
-              let toEnemyX = entityB.spriteObject.x - tthis.spriteObject.x;
-              let toEnemyY = entityB.spriteObject.y - tthis.spriteObject.y;
+            if (checkSpriteCollision(entityB, tthis)) {
+              let toEnemyX = entityB.position.x - tthis.position.x;
+              let toEnemyY = entityB.position.y - tthis.position.y;
               let toEnemyLength = Math.sqrt(
                 toEnemyX * toEnemyX + toEnemyY * toEnemyY
               );
@@ -80,8 +74,8 @@ export class Enemy extends Entity {
       }
 
       // actually move the sprite
-      this.spriteObject.x += this.velX * currentDelta;
-      this.spriteObject.y += this.velY * currentDelta;
+      this.position.x += this.velX * currentDelta;
+      this.position.y += this.velY * currentDelta;
 
       // prepare velocity for next frame
       // different movement based on enemy type
