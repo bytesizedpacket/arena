@@ -72,8 +72,8 @@ export class Enemy extends Entity {
               toEnemyY = toEnemyY / toEnemyLength;
 
               // move AWAY from the enemy for a frame
-              tthis.velX = toEnemyX * -1 * tthis.speed;
-              tthis.velY = toEnemyY * -1 * tthis.speed;
+              tthis.velX = toEnemyX * -0.5 * tthis.speed;
+              tthis.velY = toEnemyY * -0.5 * tthis.speed;
             }
           }
         });
@@ -87,16 +87,20 @@ export class Enemy extends Entity {
       // different movement based on enemy type
       switch (this.movementType) {
         case MOVEMENT_TYPE.DEFAULT:
-          this.velX = toPlayerX * this.speed;
-          this.velY = toPlayerY * this.speed;
+          // we apply friction so it doesn't get stupid fast
+          this.velX -= this.velX * 0.1;
+          this.velY -= this.velY * 0.1;
+          this.velX += (toPlayerX * this.speed) / 15;
+          this.velY += (toPlayerY * this.speed) / 15;
           break;
         case MOVEMENT_TYPE.FLY:
-          this.velX += (toPlayerX * this.speed) / 13;
-          this.velY += (toPlayerY * this.speed) / 13;
+          // friction!
+          this.velX -= this.velX * 0.02;
+          this.velY -= this.velY * 0.02;
+          this.velX += (toPlayerX * this.speed) / 15;
+          this.velY += (toPlayerY * this.speed) / 15;
           break;
       }
-
-      // we don't *actually* move the entity here, we leave this to the main game loop
     }
   }
 
