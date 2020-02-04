@@ -171,8 +171,20 @@ export class Entity {
 
   // it has been clicked!
   public onClick(e?: any) {
-    // generic entity click behavior
-    // 404 not found
+    // call the player's interact() on this
+    player.interact(this);
+  }
+
+  // what is the distance to the specified entity?
+  public distanceTo(target: Entity): number {
+    let toEntityX = target.position.x - this.position.x;
+    let toEntityY = target.position.y - this.position.y;
+    let toEnemyLength = Math.sqrt(
+      toEntityX * toEntityX + toEntityY * toEntityY
+    );
+
+    console.log(toEnemyLength);
+    return toEnemyLength;
   }
 
   // destroy this entity from the game :c

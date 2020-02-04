@@ -2,7 +2,7 @@ import { HealthPack } from "./HealthPack";
 import { Application } from "pixi.js";
 import { entities, currentDelta, viewHeight, viewWidth } from "./index";
 import { checkSpriteCollision } from "./index";
-import { Entity } from "./Entity";
+import { Entity, STATE } from "./Entity";
 import { Enemy } from "./Enemy";
 
 // useful variables
@@ -68,5 +68,14 @@ export class Player extends Entity {
     this.score = score;
     // TODO: render this within the game window
     statusDiv.innerHTML = "Current Score: " + this.score;
+  }
+
+  // when entities are clicked, they trigger this function on the player
+  public interact(target: Entity) {
+    // TODO: different weapons
+    if (this.state == STATE.ACTIVE) {
+      // make sure player is active
+      if (this.distanceTo(target) < 80) target.health -= 25;
+    }
   }
 }

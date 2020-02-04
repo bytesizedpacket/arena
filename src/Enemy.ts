@@ -101,11 +101,4 @@ export class Enemy extends Entity {
       }
     }
   }
-
-  // we have been clicked!
-  public onClick(e?: Event) {
-    super.onClick(e);
-    // TODO: check distance from player, constrain within a set distance
-    if (player.state == STATE.ACTIVE) this.health -= 25;
-  }
 }

@@ -67,7 +67,7 @@ let initLevel = function(delta?: any) {
     // fall throguh to default for now so it keeps going forever
     default:
       // put player in the center
-      // TODO: use map size instead of screen size
+      // TODO: let maps define a start posiiton
       player.position.x = viewWidth / 2 - player.spriteObject.width / 2;
       player.position.y = viewHeight / 2 - player.spriteObject.height / 2;
 
