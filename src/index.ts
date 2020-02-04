@@ -118,34 +118,6 @@ let initLevel = function(delta?: any) {
 
 // main gameplay loop
 let gameLoop = function(delta: any) {
-  // only if the player is alive...
-  if (player.state == STATE.ACTIVE) {
-    // handle input!
-    if (Keyboard.isKeyDown("KeyS", "ArrowDown")) {
-      player.velY = player.speed;
-    } else {
-      if (!Keyboard.isKeyDown("KeyW", "ArrowUp")) player.velY = 0;
-    }
-
-    if (Keyboard.isKeyDown("KeyD", "ArrowRight")) {
-      player.velX = player.speed;
-    } else {
-      if (!Keyboard.isKeyDown("KeyA", "ArrowLeft")) player.velX = 0;
-    }
-
-    if (Keyboard.isKeyDown("KeyW", "ArrowUp")) {
-      player.velY = player.speed * -1;
-    } else {
-      if (!Keyboard.isKeyDown("KeyS", "ArrowDown")) player.velY = 0;
-    }
-
-    if (Keyboard.isKeyDown("KeyA", "ArrowLeft")) {
-      player.velX = player.speed * -1;
-    } else {
-      if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) player.velX = 0;
-    }
-  }
-
   let enemyCheck = false; // do we have any enemies?
 
   // make sure every entity handles their ticks and stays inside the map

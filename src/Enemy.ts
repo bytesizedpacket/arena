@@ -84,6 +84,7 @@ export class Enemy extends Entity {
           this.velX -= this.velX * 0.1;
           this.velY -= this.velY * 0.1;
 
+          // TODO: make aggro distance a property of the enemy
           if (toPlayerLength < 100) {
             this.velX += (toPlayerX * this.speed) / 15;
             this.velY += (toPlayerY * this.speed) / 15;

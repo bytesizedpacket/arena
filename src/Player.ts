@@ -4,6 +4,10 @@ import { entities, currentDelta, viewHeight, viewWidth } from "./index";
 import { checkSpriteCollision } from "./index";
 import { Entity, STATE } from "./Entity";
 import { Enemy } from "./Enemy";
+// @ts-ignore
+import * as Keyboard from "pixi.js-keyboard";
+// @ts-ignore
+import * as Mouse from "pixi.js-mouse";
 
 // useful variables
 let statusDiv = document.getElementById("status");
@@ -30,6 +34,34 @@ export class Player extends Entity {
       statusDiv.innerHTML = "Uh-oh spaghetti-o's! You're <b>dead.</b>";
     } else {
       // we're still alive!
+
+      // only if the player is alive...
+      if (this.state == STATE.ACTIVE) {
+        // handle input!
+        if (Keyboard.isKeyDown("KeyS", "ArrowDown")) {
+          this.velY = this.speed;
+        } else {
+          if (!Keyboard.isKeyDown("KeyW", "ArrowUp")) this.velY = 0;
+        }
+
+        if (Keyboard.isKeyDown("KeyD", "ArrowRight")) {
+          this.velX = this.speed;
+        } else {
+          if (!Keyboard.isKeyDown("KeyA", "ArrowLeft")) this.velX = 0;
+        }
+
+        if (Keyboard.isKeyDown("KeyW", "ArrowUp")) {
+          this.velY = this.speed * -1;
+        } else {
+          if (!Keyboard.isKeyDown("KeyS", "ArrowDown")) this.velY = 0;
+        }
+
+        if (Keyboard.isKeyDown("KeyA", "ArrowLeft")) {
+          this.velX = this.speed * -1;
+        } else {
+          if (!Keyboard.isKeyDown("KeyD", "ArrowRight")) this.velX = 0;
+        }
+      }
 
       this.position.x += this.velX * currentDelta;
       this.position.y += this.velY * currentDelta;
