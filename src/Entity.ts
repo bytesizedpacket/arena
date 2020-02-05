@@ -143,10 +143,9 @@ export class Entity {
     }
   }
 
-  // force update the sprite if we need instant responsiveness
+  // update the sprite with our current position
   public updateSprite() {
     // set the sprite to our position relative to the player
-
     let offsetX = viewWidth / 2 - player.spriteObject.width / 2;
     let offsetY = viewHeight / 2 - player.spriteObject.height / 2;
 

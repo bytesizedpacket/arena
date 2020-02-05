@@ -1,3 +1,4 @@
+import { Map } from "./Map";
 import * as PIXI from "pixi.js";
 // make vscode ignore these since they don't have typings
 // @ts-ignore
@@ -28,12 +29,15 @@ let gameState: Function;
 export let player: Player;
 export let currentDelta = 0;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+export let currentMap: Map;
 
 // these are our assets
 let assets = [
   { name: "player", url: "assets/sprites/Player.png" },
   { name: "enemy-default", url: "assets/sprites/Enemy-default.png" },
   { name: "enemy-fly", url: "assets/sprites/Enemy-fly.png" },
+  { name: "tile-floor", url: "assets/sprites/Tile-floor.png" },
+  { name: "tile-wall", url: "assets/sprites/Tile-wall.png" },
   { name: "healthpack", url: "assets/sprites/HealthPack.png" }
 ];
 // these will be populated later
@@ -59,60 +63,66 @@ let initLevel = function(delta?: any) {
     } else {
       currentLevel = 1; // default to 1 if not set
     }
+  } else {
+    // we are loading a new level in an existing game
+
+    // prevent any items/enemies/etc from holding over from the last stage
+    currentMap.destroy();
+    entities.forEach(function(entity: Entity) {
+      if (!(entity instanceof Player)) entity.destroy();
+    });
   }
   levelDiv.innerHTML = "<b>LEVEL " + currentLevel + "</b>";
 
-  // actually generate the level now
+  // we add this back later so the map renders under us
+  app.stage.removeChild(player.spriteObject);
+  app.stage.removeChild(player.healthBar);
 
-  switch (currentLevel) {
-    case 1:
-    // yay it's level 1
-    // fall throguh to default for now so it keeps going forever
-    default:
-      // put player in the center
-      // TODO: let maps define a start posiiton
-      player.position.x = viewWidth / 2 - player.spriteObject.width / 2;
-      player.position.y = viewHeight / 2 - player.spriteObject.height / 2;
+  // construct our map object
+  currentMap = new Map(currentLevel);
 
-      // create 3 enemies
-      for (let i = 0; i < 3; i++) {
-        let currentEnemy: Enemy;
+  app.stage.addChild(player.spriteObject);
+  app.stage.addChild(player.healthBar);
 
-        // the middle enemy will have fly movement
-        if (i == 1) {
-          currentEnemy = createEnemy("enemy-fly", 1, true, MOVEMENT_TYPE.FLY);
-        } else {
-          currentEnemy = createEnemy("enemy-default", 0.8);
-        }
+  // create 3 enemies
+  // TODO: perhaps move enemy creation into the map object
+  for (let i = 0; i < 3; i++) {
+    let currentEnemy: Enemy;
 
-        switch (i) {
-          case 0:
-            // do nothing (starts at 0,0)
-            break;
-          case 1:
-            // put it halfway down the screen
-            currentEnemy.position.y =
-              viewHeight / 2 - currentEnemy.spriteObject.height / 2;
-            break;
-          case 2:
-            // put it at the bottom
-            currentEnemy.position.y =
-              viewHeight - currentEnemy.spriteObject.height;
-            break;
-        }
-      }
+    // the middle enemy will have fly movement
+    if (i == 1) {
+      currentEnemy = createEnemy("enemy-fly", 1, true, MOVEMENT_TYPE.FLY);
+    } else {
+      currentEnemy = createEnemy("enemy-default", 0.8);
+    }
 
-      // are we on a prime numbered level?
-      if (isPrime(currentLevel)) {
-        // yes - generate a health pack somewhere
-        let healthPack = new HealthPack("healthpack", app);
-        let pos = {
-          x: getRandomInt(0, viewWidth - healthPack.spriteObject.width - 1),
-          y: getRandomInt(0, viewHeight - healthPack.spriteObject.height - 1)
-        };
-        healthPack.position = pos;
-      }
-      break;
+    currentEnemy.position.x = 16;
+
+    switch (i) {
+      case 0:
+        currentEnemy.position.y = 16;
+        break;
+      case 1:
+        // put it halfway down the screen
+        currentEnemy.position.y = Math.round((currentMap.sizeY * 16) / 2);
+        break;
+      case 2:
+        // put it at the bottom
+        currentEnemy.position.y =
+          viewHeight - currentEnemy.spriteObject.height - 16;
+        break;
+    }
+  }
+
+  // are we on a prime numbered level?
+  if (isPrime(currentLevel)) {
+    // yes - generate a health pack somewhere
+    let healthPack = new HealthPack("healthpack", app);
+    let pos = {
+      x: getRandomInt(0, viewWidth - healthPack.spriteObject.width - 1),
+      y: getRandomInt(0, viewHeight - healthPack.spriteObject.height - 1)
+    };
+    healthPack.position = pos;
   }
 
   // set the gameState to gameLoop;
@@ -122,6 +132,8 @@ let initLevel = function(delta?: any) {
 // main gameplay loop
 let gameLoop = function(delta: any) {
   let enemyCheck = false; // do we have any enemies?
+
+  currentMap.updateSprites();
 
   // make sure our damage numbers animate correctly
   damageNumbers.forEach(function(damageNumber: DamageNumber) {
@@ -141,6 +153,7 @@ let gameLoop = function(delta: any) {
   });
 
   // if there are no enemies left, set up a new level
+  // TODO: different win condition?
   if (!enemyCheck) {
     currentLevel = currentLevel + 1;
     gameState = initLevel;
@@ -165,9 +178,6 @@ app.loader
 
     // set up player object
     player = new Player("player", app);
-
-    // add sprite to stage
-    app.stage.addChild(player.spriteObject);
 
     // scale view
     app.renderer.resize(viewWidth * zoomScale, viewHeight * zoomScale);
