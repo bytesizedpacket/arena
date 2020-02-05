@@ -63,6 +63,8 @@ export class Player extends Entity {
         }
       }
 
+      this.checkMapCollision();
+
       this.position.x += this.velX * currentDelta;
       this.position.y += this.velY * currentDelta;
 

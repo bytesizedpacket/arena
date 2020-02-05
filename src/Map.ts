@@ -36,12 +36,21 @@ export class Map {
           stepX == this.sizeX - 1 ||
           stepY == this.sizeY - 1
         ) {
-          currentTile = new Tile(TILE_TYPE.WALL);
+          currentTile = new Tile(TILE_TYPE.WALL, {
+            x: stepX * 16,
+            y: stepY * 16
+          });
         } else {
-          currentTile = new Tile(TILE_TYPE.FLOOR);
+          currentTile = new Tile(TILE_TYPE.FLOOR, {
+            x: stepX * 16,
+            y: stepY * 16
+          });
         }
+        currentTile.spriteObject.position.set(
+          currentTile.position.x,
+          currentTile.position.y
+        );
         this.tiles[stepX][stepY] = currentTile;
-        currentTile.spriteObject.position.set(stepX * 16, stepY * 16);
 
         this.tileContainer.addChild(currentTile.spriteObject);
       }

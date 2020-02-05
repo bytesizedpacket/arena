@@ -218,7 +218,7 @@ export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
   // alsdjfkafds
   let r1 = {
     //Find the center points of each sprite
-    centerX: entity1.position.x + sprite2.width / 2,
+    centerX: entity1.position.x + sprite1.width / 2,
     centerY: entity1.position.y + sprite1.height / 2,
     //Find the half-widths and half-heights of each sprite
     halfWidth: sprite1.width / 2,
@@ -228,7 +228,7 @@ export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
   let r2 = {
     //Find the center points of each sprite
     centerX: entity2.position.x + sprite2.width / 2,
-    centerY: entity2.position.y + sprite2.height,
+    centerY: entity2.position.y + sprite2.height / 2,
     //Find the half-widths and half-heights of each sprite
     halfWidth: sprite2.width / 2,
     halfHeight: sprite2.height / 2

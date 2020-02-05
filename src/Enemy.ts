@@ -72,6 +72,9 @@ export class Enemy extends Entity {
         });
       }
 
+      // collide with walls
+      this.checkMapCollision();
+
       // actually move the sprite
       this.position.x += this.velX * currentDelta;
       this.position.y += this.velY * currentDelta;

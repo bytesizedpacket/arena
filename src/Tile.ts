@@ -1,5 +1,6 @@
 import { app } from "./index";
 import { Sprite } from "pixi.js";
+import { Position } from "./Entity";
 export enum TILE_TYPE {
   FLOOR = "tile-floor",
   WALL = "tile-wall"
@@ -8,9 +9,11 @@ export enum TILE_TYPE {
 export class Tile {
   public tileType: TILE_TYPE;
   public spriteObject: Sprite;
+  public position: Position;
 
-  constructor(tileType: TILE_TYPE) {
+  constructor(tileType: TILE_TYPE, position: Position) {
     this.tileType = tileType;
+    this.position = position;
 
     switch (this.tileType) {
       case TILE_TYPE.FLOOR:
