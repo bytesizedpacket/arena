@@ -107,7 +107,7 @@ export class Player extends Entity {
     // TODO: different weapons
     if (this.state == STATE.ACTIVE) {
       // make sure we aren't clicking ourselves
-      if (target != this) {
+      if (!(target instanceof Player)) {
         // make sure player is active
         if (this.distanceTo(target) < 80) target.damage(25);
       }
