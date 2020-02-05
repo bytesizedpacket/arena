@@ -133,8 +133,6 @@ let initLevel = function(delta?: any) {
 let gameLoop = function(delta: any) {
   let enemyCheck = false; // do we have any enemies?
 
-  currentMap.updateSprites();
-
   // make sure our damage numbers animate correctly
   damageNumbers.forEach(function(damageNumber: DamageNumber) {
     damageNumber.tick();
@@ -151,6 +149,8 @@ let gameLoop = function(delta: any) {
       if (entity instanceof Enemy) enemyCheck = true;
     }
   });
+
+  currentMap.updateSprites();
 
   // if there are no enemies left, set up a new level
   // TODO: different win condition?
