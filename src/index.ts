@@ -9,6 +9,7 @@ import { STATE, MOVEMENT_TYPE } from "./Entity";
 import { Player } from "./Player";
 import { Enemy } from "./Enemy";
 import { HealthPack } from "./HealthPack";
+import { DamageNumber } from "./DamageNumber";
 // TODO: reduce size of bundle.js by following this guide https://medium.com/anvoevodin/how-to-set-up-pixijs-v5-project-with-npm-and-webpack-41c18942c88d
 
 // aliases and helpful variables
@@ -35,7 +36,9 @@ let assets = [
   { name: "enemy-fly", url: "assets/sprites/Enemy-fly.png" },
   { name: "healthpack", url: "assets/sprites/HealthPack.png" }
 ];
-export let entities: Entity[] = []; // this will be populated later
+// these will be populated later
+export let entities: Entity[] = [];
+export let damageNumbers: DamageNumber[] = [];
 
 // setup pixi
 export let app = new PIXI.Application({ width: viewWidth, height: viewHeight });
@@ -120,35 +123,16 @@ let initLevel = function(delta?: any) {
 let gameLoop = function(delta: any) {
   let enemyCheck = false; // do we have any enemies?
 
+  // make sure our damage numbers animate correctly
+  damageNumbers.forEach(function(damageNumber: DamageNumber) {
+    damageNumber.tick();
+  });
+
   // make sure every entity handles their ticks and stays inside the map
   entities.forEach(function(entity: Entity) {
     // don't tick it if it's inactive
     if (entity.state != STATE.INACTIVE) {
-      // TEMPORARILY DISABLED
-      /*
-
-      // constrain it to the map
-      // also set velocity to 0 so they turn around quicker
-      if (entity.position.x < 0) {
-        entity.position.x = 0;
-        entity.velX = 0;
-      }
-      if (entity.position.y < 0) {
-        entity.position.y = 0;
-        entity.velY = 0;
-      }
-      // TODO: constrain these to map instead of screen size
-      if (entity.position.x > viewWidth - entity.spriteObject.width) {
-        entity.position.x = viewWidth - entity.spriteObject.width;
-        entity.velX = 0;
-      }
-      if (entity.position.y > viewHeight - entity.spriteObject.height) {
-        entity.position.y = viewHeight - entity.spriteObject.height;
-        entity.velY = 0;
-      }
-
-      */
-
+      // all movement and behavior is handled in the entities' respective classes
       entity.tick(); // tock
 
       // is this an enemy?

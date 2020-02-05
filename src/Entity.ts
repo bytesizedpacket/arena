@@ -4,6 +4,7 @@ import { Container } from "pixi.js";
 import { Application } from "pixi.js";
 import { entities } from "./index";
 import { app, player, viewWidth, viewHeight } from "./index";
+import { DamageNumber } from "./DamageNumber";
 
 export enum STATE {
   ACTIVE,
@@ -36,7 +37,7 @@ export class Entity {
   public velX: number = 0; // velocity X
   public velY: number = 0; // velocity Y
   public position: Position;
-  public tilePosition: Position; // this represents our tile location on the map
+  public tilePosition: Position; // this represents our tile location on the map (regular position is exact pixels)
 
   constructor(
     spriteName: string,
@@ -174,6 +175,23 @@ export class Entity {
     }
 
     this.updateSprite();
+  }
+
+  // oof ow ouch that hurt
+  public damage(amount: number) {
+    // TODO: implement defense stat that affects actual damage output
+    this.health -= amount;
+
+    new DamageNumber(amount.toString(), this, "red");
+    // TODO: spawn damage indicator
+  }
+
+  // give us some health back
+  public heal(amount: number) {
+    this.health += amount;
+    if (this.health > 100) this.health = 100; // don't overheal
+
+    new DamageNumber(amount.toString(), this, "green");
   }
 
   // it has been clicked!

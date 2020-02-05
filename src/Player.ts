@@ -72,10 +72,10 @@ export class Player extends Entity {
         if (checkSpriteCollision(tthis, entity)) {
           switch (entity.constructor) {
             case Enemy:
-              tthis.health -= 1;
+              tthis.damage(1);
               break;
             case HealthPack:
-              tthis.health = 100;
+              tthis.heal(100);
               entity.destroy();
               break;
           }
@@ -107,7 +107,7 @@ export class Player extends Entity {
     // TODO: different weapons
     if (this.state == STATE.ACTIVE) {
       // make sure player is active
-      if (this.distanceTo(target) < 80) target.health -= 25;
+      if (this.distanceTo(target) < 80) target.damage(25);
     }
   }
 }
