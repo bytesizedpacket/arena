@@ -64,7 +64,7 @@ export class Enemy extends Entity {
               toEnemyX = toEnemyX / toEnemyLength;
               toEnemyY = toEnemyY / toEnemyLength;
 
-              // move AWAY from the enemy for a frame
+              // bump the enemy away from what it just collided with
               tthis.velX = toEnemyX * -0.5 * tthis.speed;
               tthis.velY = toEnemyY * -0.5 * tthis.speed;
             }
