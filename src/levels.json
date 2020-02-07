@@ -125,7 +125,13 @@
         ]
       ],
       "enemies": [
-        { "type": "enemy-default", "position": { "x": 1, "y": 0 } },
+        {
+          "type": "enemy-default",
+          "position": {
+            "x": 1,
+            "y": 0
+          }
+        },
         {
           "type": "enemy-fly",
           "position": {
