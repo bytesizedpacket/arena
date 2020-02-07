@@ -15,8 +15,8 @@ import { DamageNumber } from "./DamageNumber";
 
 // aliases and helpful variables
 const urlParams = new URLSearchParams(window.location.search);
-let statusDiv = document.getElementById("status");
-let levelDiv = document.getElementById("level");
+export let statusDiv = document.getElementById("status");
+export let levelDiv = document.getElementById("level");
 
 // game properties
 export let viewWidth: number = 256;
@@ -84,43 +84,19 @@ let initLevel = function(delta?: any) {
   app.stage.addChild(player.spriteObject);
   app.stage.addChild(player.healthBar);
 
-  // create 3 enemies
-  // TODO: perhaps move enemy creation into the map object
-  for (let i = 0; i < 3; i++) {
-    let currentEnemy: Enemy;
-
-    // the middle enemy will have fly movement
-    if (i == 1) {
-      currentEnemy = createEnemy("enemy-fly", 1, true, MOVEMENT_TYPE.FLY);
-    } else {
-      currentEnemy = createEnemy("enemy-default", 0.8);
-    }
-
-    currentEnemy.position.x = 16;
-
-    switch (i) {
-      case 0:
-        currentEnemy.position.y = 16;
-        break;
-      case 1:
-        // put it halfway down the screen
-        currentEnemy.position.y = Math.round((currentMap.sizeY * 16) / 2);
-        break;
-      case 2:
-        // put it at the bottom
-        currentEnemy.position.y =
-          viewHeight - currentEnemy.spriteObject.height - 16;
-        break;
-    }
-  }
-
   // are we on a prime numbered level?
   if (isPrime(currentLevel)) {
     // yes - generate a health pack somewhere
     let healthPack = new HealthPack("healthpack", app);
     let pos = {
-      x: getRandomInt(0, viewWidth - healthPack.spriteObject.width - 1),
-      y: getRandomInt(0, viewHeight - healthPack.spriteObject.height - 1)
+      x: getRandomInt(
+        0,
+        currentMap.sizeX * 16 - healthPack.spriteObject.width - 1
+      ),
+      y: getRandomInt(
+        0,
+        currentMap.sizeY * 16 - healthPack.spriteObject.height - 1
+      )
     };
     healthPack.position = pos;
   }

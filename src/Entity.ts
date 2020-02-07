@@ -14,8 +14,9 @@ export enum STATE {
 }
 
 export enum MOVEMENT_TYPE {
-  DEFAULT, // regular movement
-  FLY // "orbit" movement
+  // we map these to the enemy sprite names so the levels.json is easier to use
+  DEFAULT = "enemy-default", // regular movement
+  FLY = "enemy-fly" // "orbit" movement
 }
 
 // we use this independently from the screen/sprite coordingates
@@ -183,7 +184,6 @@ export class Entity {
     this.health -= amount;
 
     new DamageNumber(amount.toString(), this, "red");
-    // TODO: spawn damage indicator
   }
 
   // give us some health back
@@ -226,74 +226,77 @@ export class Entity {
     // check in a 3x3 radius around this entity
     for (let stepX = 0; stepX < 3; stepX++) {
       for (let stepY = 0; stepY < 3; stepY++) {
-        let currentTile =
-          currentMap.tiles[this.tilePosition.x - (stepX - 1)][
-            this.tilePosition.y - (stepY - 1)
-          ];
-        if (currentTile) {
-          if (currentTile.tileType == TILE_TYPE.WALL) {
-            //Define the variables we'll need to calculate
-            let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
-            let sprite1 = this.spriteObject;
-            let sprite2 = currentTile.spriteObject;
+        // if we're checking something outside the map, this won't exist
+        if (currentMap.tiles[this.tilePosition.x - (stepX - 1)] != undefined) {
+          let currentTile =
+            currentMap.tiles[this.tilePosition.x - (stepX - 1)][
+              this.tilePosition.y - (stepY - 1)
+            ];
+          if (currentTile != undefined) {
+            if (currentTile.tileType == TILE_TYPE.WALL) {
+              //Define the variables we'll need to calculate
+              let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+              let sprite1 = this.spriteObject;
+              let sprite2 = currentTile.spriteObject;
 
-            // alsdjfkafds
-            let r1 = {
-              //Find the center points of each sprite
-              centerX: this.position.x + sprite1.width / 2,
-              centerY: this.position.y + sprite1.height / 2,
-              //Find the half-widths and half-heights of each sprite
-              halfWidth: sprite1.width / 2,
-              halfHeight: sprite1.height / 2
-            };
+              // alsdjfkafds
+              let r1 = {
+                //Find the center points of each sprite
+                centerX: this.position.x + sprite1.width / 2,
+                centerY: this.position.y + sprite1.height / 2,
+                //Find the half-widths and half-heights of each sprite
+                halfWidth: sprite1.width / 2,
+                halfHeight: sprite1.height / 2
+              };
 
-            let r2 = {
-              //Find the center points of each sprite
-              centerX: currentTile.position.x + sprite2.width / 2,
-              centerY: currentTile.position.y + sprite2.height / 2,
-              //Find the half-widths and half-heights of each sprite
-              halfWidth: sprite2.width / 2,
-              halfHeight: sprite2.height / 2
-            };
+              let r2 = {
+                //Find the center points of each sprite
+                centerX: currentTile.position.x + sprite2.width / 2,
+                centerY: currentTile.position.y + sprite2.height / 2,
+                //Find the half-widths and half-heights of each sprite
+                halfWidth: sprite2.width / 2,
+                halfHeight: sprite2.height / 2
+              };
 
-            //hit will determine whether there's a collision
-            hit = false;
+              //hit will determine whether there's a collision
+              hit = false;
 
-            //Calculate the distance vector between the sprites
-            vx = r1.centerX - r2.centerX;
-            vy = r1.centerY - r2.centerY;
+              //Calculate the distance vector between the sprites
+              vx = r1.centerX - r2.centerX;
+              vy = r1.centerY - r2.centerY;
 
-            //Figure out the combined half-widths and half-heights
-            combinedHalfWidths = r1.halfWidth + r2.halfWidth;
-            combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+              //Figure out the combined half-widths and half-heights
+              combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+              combinedHalfHeights = r1.halfHeight + r2.halfHeight;
 
-            //Check for a collision on the x axis
-            if (Math.abs(vx) < combinedHalfWidths) {
-              //A collision might be occurring. Check for a collision on the y axis
-              if (Math.abs(vy) < combinedHalfHeights) {
-                //There's definitely a collision happening
-                hit = true;
+              //Check for a collision on the x axis
+              if (Math.abs(vx) < combinedHalfWidths) {
+                //A collision might be occurring. Check for a collision on the y axis
+                if (Math.abs(vy) < combinedHalfHeights) {
+                  //There's definitely a collision happening
+                  hit = true;
+                } else {
+                  //There's no collision on the y axis
+                  hit = false;
+                }
               } else {
-                //There's no collision on the y axis
+                //There's no collision on the x axis
                 hit = false;
               }
-            } else {
-              //There's no collision on the x axis
-              hit = false;
-            }
 
-            if (hit) {
-              let toTileX = currentTile.position.x - this.position.x;
-              let toTileY = currentTile.position.y - this.position.y;
-              let toTileLength = Math.sqrt(
-                toTileX * toTileX + toTileY * toTileY
-              );
-              toTileX = toTileX / toTileLength;
-              toTileY = toTileY / toTileLength;
+              if (hit) {
+                let toTileX = currentTile.position.x - this.position.x;
+                let toTileY = currentTile.position.y - this.position.y;
+                let toTileLength = Math.sqrt(
+                  toTileX * toTileX + toTileY * toTileY
+                );
+                toTileX = toTileX / toTileLength;
+                toTileY = toTileY / toTileLength;
 
-              // bump the enemy away from what it just collided with
-              this.velX = toTileX * -0.5 * this.speed;
-              this.velY = toTileY * -0.5 * this.speed;
+                // bump the enemy away from what it just collided with
+                this.velX = toTileX * -0.5 * this.speed;
+                this.velY = toTileY * -0.5 * this.speed;
+              }
             }
           }
         }

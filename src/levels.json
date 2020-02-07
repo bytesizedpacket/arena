@@ -1,0 +1,139 @@
+{
+  "levels": [
+    {
+      "startPos": { "x": 8, "y": 5 },
+      "tiles": [
+        [
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" },
+          { "type": "tile-floor" }
+        ],
+        [
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" },
+          { "type": "tile-wall" }
+        ]
+      ],
+      "enemies": [
+        { "type": "enemy-default", "position": { "x": 1, "y": 0 } },
+        {
+          "type": "enemy-fly",
+          "position": {
+            "x": 1,
+            "y": 9
+          }
+        }
+      ]
+    }
+  ]
+}
