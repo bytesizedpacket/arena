@@ -293,7 +293,7 @@ export class Entity {
                 toTileX = toTileX / toTileLength;
                 toTileY = toTileY / toTileLength;
 
-                // bump the enemy away from what it just collided with
+                // bump the entity away from what it just collided with
                 this.velX = toTileX * -0.5 * this.speed;
                 this.velY = toTileY * -0.5 * this.speed;
               }
