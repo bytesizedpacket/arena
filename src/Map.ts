@@ -4,6 +4,7 @@ import { Container } from "pixi.js";
 import { Tile, TILE_TYPE } from "./Tile";
 import { Enemy } from "./Enemy";
 
+// if this levels.json is not formatted correctly, the game WILL crash
 const levelData = require("./levels.json");
 
 export class Map {
