@@ -1,6 +1,6 @@
-# Arena
+# GJORG's ARENA
 
-Simple arena game
+Arena game set in the world of Damos where you fight hordes of vicious creatures to the death for your honor and survival.
 
 Made with PIXI.JS, Typescript, and Webpack.
 
