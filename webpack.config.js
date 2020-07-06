@@ -22,15 +22,15 @@ if (isProd) {
         sourceMap: true,
         terserOptions: {
           mangle: true,
-          output: { comments: false }
+          output: { comments: false },
         },
-        extractComments: false
-      })
-    ]
+        extractComments: false,
+      }),
+    ],
   };
 } else {
   ooptimization = {
-    minimize: false
+    minimize: false,
   };
 }
 
@@ -38,36 +38,38 @@ module.exports = {
   mode: mode,
   entry: path.join(__dirname, "src", "index.ts"),
   plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, "src", "assets"),
-        to: "assets"
-      }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, "src", "assets"),
+          to: "assets",
+        },
+      ],
+    }),
     new HTMLWebpackPlugin({
       template: "src/index.html",
       filename: "index.html",
-      favicon: "src/assets/favicon.ico"
-    })
+      favicon: "src/assets/favicon.ico",
+    }),
   ],
   optimization: ooptimization,
   output: {
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
     filename: "bundle.js",
-    chunkFilename: "[name].js"
+    chunkFilename: "[name].js",
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         use: "ts-loader",
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".tsx", ".ts", ".js"],
   },
   devtool: isProd ? false : "source-map", // only generate source maps in development mode
   devServer: {
@@ -77,6 +79,6 @@ module.exports = {
     host: "0.0.0.0",
     port: 8080,
     compress: true,
-    disableHostCheck: true
-  }
+    disableHostCheck: true,
+  },
 };

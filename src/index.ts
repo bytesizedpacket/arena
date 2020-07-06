@@ -38,7 +38,7 @@ let assets = [
   { name: "enemy-fly", url: "assets/sprites/Enemy-fly.png" },
   { name: "tile-floor", url: "assets/sprites/Tile-floor.png" },
   { name: "tile-wall", url: "assets/sprites/Tile-wall.png" },
-  { name: "healthpack", url: "assets/sprites/HealthPack.png" }
+  { name: "healthpack", url: "assets/sprites/HealthPack.png" },
 ];
 // these will be populated later
 export let entities: Entity[] = [];
@@ -49,12 +49,12 @@ export let app = new PIXI.Application({ width: viewWidth, height: viewHeight });
 document.body.appendChild(app.view);
 
 // disable rightclicking
-app.view.addEventListener("contextmenu", e => {
+app.view.addEventListener("contextmenu", (e) => {
   if (e.type == "contextmenu") e.preventDefault();
 });
 
 // initialize a new level
-let initLevel = function(delta?: any) {
+let initLevel = function (delta?: any) {
   if (!currentLevel) {
     // level hasn't been set - let's check the url variable
     let levelSelect: number = parseInt(urlParams.get("level"));
@@ -68,7 +68,7 @@ let initLevel = function(delta?: any) {
 
     // prevent any items/enemies/etc from holding over from the last stage
     currentMap.destroy();
-    entities.forEach(function(entity: Entity) {
+    entities.forEach(function (entity: Entity) {
       if (!(entity instanceof Player)) entity.destroy();
     });
   }
@@ -96,7 +96,7 @@ let initLevel = function(delta?: any) {
       y: getRandomInt(
         0,
         currentMap.sizeY * 16 - healthPack.spriteObject.height - 1
-      )
+      ),
     };
     healthPack.position = pos;
   }
@@ -106,16 +106,16 @@ let initLevel = function(delta?: any) {
 };
 
 // main gameplay loop
-let gameLoop = function(delta: any) {
+let gameLoop = function (delta: any) {
   let enemyCheck = false; // do we have any enemies?
 
   // make sure our damage numbers animate correctly
-  damageNumbers.forEach(function(damageNumber: DamageNumber) {
+  damageNumbers.forEach(function (damageNumber: DamageNumber) {
     damageNumber.tick();
   });
 
   // make sure every entity handles their ticks and stays inside the map
-  entities.forEach(function(entity: Entity) {
+  entities.forEach(function (entity: Entity) {
     // don't tick it if it's inactive
     if (entity.state != STATE.INACTIVE) {
       // all movement and behavior is handled in the entities' respective classes
@@ -137,47 +137,41 @@ let gameLoop = function(delta: any) {
 };
 
 // begin loading assets
-app.loader
-  .add(assets)
-  .on("progress", function() {
-    statusDiv.innerHTML = app.loader.progress + "% Loading...";
-  })
-  .load(function() {
-    // Set up a new game
+app.loader.add(assets).load(function () {
+  // Set up a new game
 
-    // make stage interactable
-    app.stage.interactive = true;
+  // make stage interactable
+  app.stage.interactive = true;
 
-    // tell the user to click the enemies!
-    // TODO: make this a popup notification of some kind
-    statusDiv.innerHTML = "Click the enemies!";
+  // tell the user to click the enemies!
+  // TODO: make this a popup notification of some kind
+  statusDiv.innerHTML = "Click the enemies!";
 
-    // set up player object
-    player = new Player("player", app);
+  // set up player object
+  player = new Player("player", app);
 
-    // scale view
-    app.renderer.resize(viewWidth * zoomScale, viewHeight * zoomScale);
-    app.stage.scale.set(zoomScale, zoomScale);
+  // scale view
+  app.renderer.resize(viewWidth * zoomScale, viewHeight * zoomScale);
+  app.stage.scale.set(zoomScale, zoomScale);
 
-    // center
+  // center
+  app.view.style.position = "absolute";
+  app.view.style.left = ((window.innerWidth - app.renderer.width) >> 1) + "px";
+
+  // keep centered on resize
+  window.onresize = function (event: Event) {
     app.view.style.position = "absolute";
     app.view.style.left =
       ((window.innerWidth - app.renderer.width) >> 1) + "px";
+  };
 
-    // keep centered on resize
-    window.onresize = function(event: Event) {
-      app.view.style.position = "absolute";
-      app.view.style.left =
-        ((window.innerWidth - app.renderer.width) >> 1) + "px";
-    };
-
-    // begin game loop
-    gameState = initLevel;
-    app.ticker.add(delta => tick(delta));
-  });
+  // begin game loop
+  gameState = initLevel;
+  app.ticker.add((delta) => tick(delta));
+});
 
 // keeps all of our shit running
-let tick = function(delta: any) {
+let tick = function (delta: any) {
   currentDelta = delta;
   gameState(delta);
   Keyboard.update();
@@ -185,7 +179,7 @@ let tick = function(delta: any) {
 };
 
 // check for collision between two sprites
-export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
+export let checkSpriteCollision = function (entity1: Entity, entity2: Entity) {
   //Define the variables we'll need to calculate
   let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
   let sprite1 = entity1.spriteObject;
@@ -198,7 +192,7 @@ export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
     centerY: entity1.position.y + sprite1.height / 2,
     //Find the half-widths and half-heights of each sprite
     halfWidth: sprite1.width / 2,
-    halfHeight: sprite1.height / 2
+    halfHeight: sprite1.height / 2,
   };
 
   let r2 = {
@@ -207,7 +201,7 @@ export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
     centerY: entity2.position.y + sprite2.height / 2,
     //Find the half-widths and half-heights of each sprite
     halfWidth: sprite2.width / 2,
-    halfHeight: sprite2.height / 2
+    halfHeight: sprite2.height / 2,
   };
 
   //hit will determine whether there's a collision
@@ -240,7 +234,7 @@ export let checkSpriteCollision = function(entity1: Entity, entity2: Entity) {
   return hit;
 };
 
-let createEnemy = function(
+let createEnemy = function (
   spriteName: string,
   speed?: number,
   displayHealthBar?: boolean,
